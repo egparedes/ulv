@@ -35,7 +35,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "test -x scripts/fmt-file.sh && scripts/fmt-file.sh \"$CLAUDE_TOOL_INPUT_FILE_PATH\" || true"
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); S=\"${CLAUDE_PROJECT_DIR:-.}/scripts/fmt-file.sh\"; [ -n \"$f\" ] && [ -x \"$S\" ] && \"$S\" \"$f\" || true"
           }
         ]
       }
@@ -46,7 +46,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "S=\"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks/block-destructive.sh\"; [ -r \"$S\" ] || exit 2; echo \"$CLAUDE_TOOL_INPUT\" | sh \"$S\""
+            "command": "S=\"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks/block-destructive.sh\"; [ -r \"$S\" ] || exit 2; c=$(jq -r '.tool_input.command // empty') || exit 2; [ -n \"$c\" ] || exit 2; printf '%s' \"$c\" | sh \"$S\""
           }
         ]
       }

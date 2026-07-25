@@ -14,8 +14,9 @@ style, testing patterns. Prefer concrete code examples over rules._
 
 ## Anti-patterns (with the fix)
 
-_For every "don't", give the matching "do" right next to it. A wall of "don'ts"
-without alternatives makes agents over-cautious and produces worse code._
+_Fill in: for every "don't", the matching "do" right next to it. A wall of
+"don'ts" without alternatives makes agents over-cautious and produces worse
+code._
 
 Example:
 

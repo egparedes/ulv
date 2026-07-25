@@ -25,9 +25,11 @@ this file.
 - Architecture overview: [`development/architecture.md`](development/architecture.md)
 - Driving the harness (Claude Code & OpenCode): [`development/harness-usage.md`](development/harness-usage.md)
 - Style guide: [`development/style.md`](development/style.md)
+- Domain vocabulary (use these terms in code and specs): [`development/glossary.md`](development/glossary.md)
 - Testing strategy: [`development/testing.md`](development/testing.md)
 - ADRs (decisions of record): [`development/adr/`](development/adr/)
-- Per-feature specs: [`development/work/<YYYY-MM>-<slug>/`](development/work/)
+- Per-feature work units: [`development/work/<YYYY-MM>-<slug>/`](development/work/)
+- Index of the whole tree: [`development/README.md`](development/README.md)
 - Supported agents & how to add one: [`.agents/README.md`](.agents/README.md)
 
 ## Do
@@ -41,15 +43,28 @@ this file.
   `/spec` (Product Owner) → `/plan` (Architect) → `/build` (Developer)
   → `/verify` (Reviewer). Each phase stops for review before the next
   begins. See `.agents/commands/` and `.agents/subagents/`.
-- For a new architectural choice (dependency, framework, persistence, auth),
-  add an ADR in `development/adr/`. ADRs are append-only; supersede with a new file.
+- On any conflict between documents, the authority order is
+  [`development/architecture.md`](development/architecture.md) > `spec.md` > `plan.md` >
+  `tasks.md`. Never silently resolve a contradiction — record it in the
+  feature's `report.md` and stop if it blocks a success criterion.
+- When a decision exceeds your authority (loosening a test tolerance or
+  assertion, adding a dependency, changing behaviour the spec froze), write a
+  `DECISION-PENDING:` line in the feature's `report.md` and stop; every such
+  line gets a row in the decision register
+  ([`development/adr/README.md`](development/adr/README.md)) in the same PR.
+- Some significant decisions warrant an ADR under `development/adr/` — check the
+  criteria in [`development/adr/README.md`](development/adr/README.md) before
+  writing one; skip trivial or easily reversed choices. ADRs are append-only;
+  supersede with a new file.
 - When investigating a large codebase, prefer the `explorer` subagent (read-only)
   over loading large files into the main context.
 
 ## Don't
 
 - Don't edit anything under `*/generated/` — it's overwritten by your project's codegen pipeline.
-- Don't add a runtime dependency without an ADR.
+- Don't lock in a new dependency or datastore without checking whether it clears
+  the ADR bar ([`development/adr/README.md`](development/adr/README.md)) — such
+  choices usually warrant one.
 - Don't run destructive Git: `push --force`, `reset --hard origin/*`,
   history rewrites on shared branches.
 - Don't put secrets, hostnames, or per-developer paths in this file —
@@ -76,15 +91,25 @@ this file.
 
 ## Working memory
 
-Per-feature spec directories use this layout:
+`development/` is the repo's process memory — agent-facing docs, ADRs, and
+work units; it is never published. `docs/`, if the project has one, is user
+documentation only (like `src/` is for sources). Per-feature work-unit
+directories use this layout:
 
 ```
 development/work/<YYYY-MM>-<slug>/
 ├─ spec.md     # WHAT and WHY; no implementation detail
 ├─ plan.md     # numbered phased plan; each phase has tests
 ├─ tasks.md    # checkbox list the agent ticks off
-└─ scratch.md  # agent's working notes; cleared on completion (gitignored)
+├─ report.md   # what actually happened: deviations, negative results, follow-ups
+└─ scratch.md  # shared working channel: hand-backs, spike Q&A, explorer
+               # summaries; dies at completion (gitignored)
 ```
 
 `scratch.md` is gitignored by default. Promote anything durable into `spec.md`,
-`plan.md`, an ADR, or `docs/`.
+`plan.md`, `report.md`, an ADR, or the `development/` docs.
+
+Liveness: `spec.md` freezes once reviewed, `plan.md` once build starts,
+`report.md` at merge. Never retro-edit a merged report — new findings go in
+the report of the feature that finds them. Full table:
+[`development/harness-usage.md`](development/harness-usage.md#document-liveness).

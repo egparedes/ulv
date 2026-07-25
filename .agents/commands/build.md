@@ -25,6 +25,8 @@ You are carrying out the implementation phase of a feature.
    - Work one phase at a time, writing tests first where the plan
      calls for behaviour change.
    - Tick `tasks.md` checkboxes in the same commit as the code change.
+   - Keep `report.md` current: deviations, abandoned approaches, and
+     `DECISION-PENDING:` escalations are recorded when they happen.
    - Run `make verify` at every phase boundary.
    - Stop at the end of each phase and hand off to `/verify`
      (Reviewer) before starting the next.

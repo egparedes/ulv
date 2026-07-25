@@ -15,7 +15,7 @@ See also: [`AGENTS.md`](../AGENTS.md) (agent instructions),
 ## The shared model
 
 The canonical definitions live once under `.agents/` and are symlinked into each
-tool's config directory, so the same roles, commands, and skill serve every
+tool's config directory, so the same roles, commands, and skills serve every
 tool. **You edit the files under `.agents/`, never the symlinks.**
 
 ```
@@ -23,6 +23,11 @@ tool. **You edit the files under `.agents/`, never the symlinks.**
 .agents/commands/   ─┼─►  .claude/commands/    .opencode/commands/    # /spec /plan /build /verify
 .agents/skills/     ─┴─►  .claude/skills/      .opencode/skills/      # skills
 ```
+
+`.agents/skills/` holds the four **role playbooks** (`{product-owner,architect,
+developer,reviewer}-playbook`) plus the shared `design-principles` ground rules
+they all link. Each role subagent reads its own playbook as part of its
+instructions; the `verify` skill is separate — see below.
 
 The design is a **gated four-phase loop** — one slash command per phase, each
 backed by a single-purpose subagent that **stops for human review before the
@@ -52,7 +57,8 @@ The five subagents and their access:
 ### 1. Manual (you type it)
 
 - **Slash commands:** `/spec <slug>`, `/plan [dir]`, `/build [dir]`, `/verify`.
-- **Skill by name:** "use the verify skill".
+- **Skill by name:** "use the architect-playbook skill", "use the verify
+  skill".
 - **Subagent by name:** Claude Code — "use the explorer subagent to find where X
   is wired up"; OpenCode — `@explorer find where X is wired up` (the filename is
   the agent id).
@@ -64,6 +70,8 @@ your prompt matches that language, the capability fires without you naming it:
 
 - The `verify` skill fires on "verify", "is this ready", "ready to commit",
   "check this", or after any non-trivial edit.
+- The role playbooks fire on method cues — "how should I design this", "weigh
+  the alternatives", "is this good" — independently of the slash commands.
 - `explorer` fires on "find where X is implemented", "how does Y work", "what
   calls Z".
 - The role agents fire on their phase cues (see [per-phase prompting](#writing-prompts-so-the-right-phase-config-is-used)).
@@ -99,7 +107,7 @@ Claude Code only). You cannot prompt around the hooks:
 
 Permissions allowlist the build tool, read-only git (`status/diff/log/show`),
 and `rg/ls/cat/head/tail`; destructive operations are denied.
-`.claude/rules/` holds path-scoped rule fragments (currently empty). Default to
+`.claude/rules/` holds path-scoped rule fragments (comment hygiene ships there). Default to
 **plan mode** (`shift-tab`) for non-trivial work.
 
 ## OpenCode specifics
@@ -200,11 +208,16 @@ language and the correct agent + output format is selected automatically.
 
 - **Trigger words:** "new feature", "spec out", "I want to add…", or `/spec <slug>`.
 - **What you get:** `spec.md` with Problem / Goal / Users & stakeholders /
-  Success criteria / Non-goals / Open questions. WHAT and WHY only — no file
-  paths or libraries.
+  Success criteria / Non-goals / Constraints / Glossary / Open questions. WHAT
+  and WHY only — no file paths or libraries.
 - **Prompt tips:** Give the user-facing intent and at least one observable
-  success condition. Don't prescribe implementation — the PO strips it. Expect
-  _one_ clarifying question if ambiguous, then it stops for your review.
+  success condition. Don't prescribe implementation — the PO strips it.
+- **Expect a dialogue, not one round.** The PO looks up whatever the repo can
+  answer, then stops on the single highest-value question it still needs you
+  for — with its own recommended answer attached, so "yes, go with that" is a
+  valid reply. Answer it and the loop resumes; it writes the spec once nothing
+  blocking is left (`/spec` caps this at five rounds). Repeated questions are
+  the design working, not the agent stuck.
 
 ### Phase 2 — Plan (architect)
 
@@ -215,6 +228,12 @@ language and the correct agent + output format is selected automatically.
 - **Prompt tips:** Run only once the spec is approved. New
   dependency/persistence/protocol choices are surfaced in the **Architecture
   decisions** block and flagged "ADR needed". It writes no code and stops.
+- **Expect spike round-trips.** When the plan would rest on an untested
+  assumption, the architect hands back a `SPIKE-REQUEST:` and the main agent
+  runs a throwaway experiment (three rounds max), folding the findings into
+  the plan's **Spike findings** section — so `/plan` may take a few
+  hand-backs before `plan.md` appears. Spike code is disposable; only the
+  findings survive.
 
 ### Phase 3 — Build (developer)
 
@@ -232,11 +251,14 @@ language and the correct agent + output format is selected automatically.
 ### Phase 4 — Verify / review (reviewer)
 
 - **Trigger:** `/verify`.
-- **What you get:** a **GO / NEEDS-WORK** verdict across three axes — spec
+- **What you get:** a **GO / NEEDS-WORK** verdict across four axes — spec
   conformance (each criterion has observable evidence), plan conformance (no
-  undocumented detours), implementation quality — plus a citation-rich defect
-  list (`path/file.ext:LINE`). It runs the gate; a red gate is automatic
-  NEEDS-WORK.
+  undocumented detours), implementation quality, and report honesty
+  (`report.md` must match the code; undeclared deviations are defects) — plus
+  a citation-rich defect list (`path/file.ext:LINE`) ranked MAJOR / MINOR /
+  INFO. It re-runs the gate itself (it never takes the Developer's word), and
+  it reads `plan.md`'s **Review checklist** as extra instructions. A red gate
+  or any MAJOR is automatic NEEDS-WORK.
 - **Loop back:** NEEDS-WORK → `/build` to fix; GO → ship/next phase. The reviewer
   is read-only — it never fixes, only reports.
 
@@ -250,6 +272,24 @@ These are distinct:
 - **/verify command** = full reviewer pass against spec + plan + diff with a GO
   verdict. Use at a phase boundary.
 
+## Document liveness
+
+Which harness files may still change, and when they freeze. "Frozen" means
+content-frozen: fixing a broken link in a sanctioned cleanup is fine; changing
+what the document *says* is not.
+
+| File | Liveness |
+| --- | --- |
+| `AGENTS.md`, `CLAUDE.md`, `development/*.md` | living, **trunk-gated**: changed via a dedicated PR (or an explicit maintainer request), never silently mid-feature. The two **registers** (last rows) accrete by their own contracts instead |
+| `development/work/*/spec.md` | frozen once reviewed — scope changes get a new spec revision, noted in `report.md` |
+| `development/work/*/plan.md` | frozen once `/build` starts — if the plan is wrong, hand back to `/plan`; don't edit it mid-build |
+| `development/work/*/tasks.md` | living during build |
+| `development/work/*/report.md` | frozen at merge — **never retro-edited**; new findings go in the report of the feature that finds them |
+| `development/adr/NNNN-*.md` | frozen once accepted, except the Status line (supersede with a new ADR) |
+| `development/adr/README.md` decision register | **register** — rows appended mid-feature (each `DECISION-PENDING:` marker lands with its row in the same PR), Status flipped in place |
+| `development/glossary.md` | **register** — entries appended mid-feature only by promotion from a reviewed spec's **Glossary** section at `/spec` wrap-up (the Reviewer checks each new entry against that spec); renames and meaning changes are trunk-gated like prose |
+| `development/work/*/scratch.md` | dead on completion (gitignored) |
+
 ## Conventions the agents already know (don't re-specify)
 
 These are enforced by docs + hooks; restating them in prompts is noise:
@@ -261,10 +301,16 @@ These are enforced by docs + hooks; restating them in prompts is noise:
   slow suites belong in CI.
 - **Tests are the spec** — a behaviour change means changing/adding a test first.
 - **Commits** — Conventional Commits 1.0.0 in the **PR title** (squash-merge); branch commits can be freeform. See [`development/style.md#commit-messages`](style.md#commit-messages).
-- **ADRs** — any new dependency/persistence/protocol/auth decision gets an ADR in
-  `development/adr/` (append-only). The architect flags these.
+- **ADRs** — a significant decision may warrant an ADR in `development/adr/`
+  (append-only); check the criteria in [`development/adr/README.md`](adr/README.md)
+  before writing one — trivial or reversible choices get none. The architect flags
+  candidates.
 - **Working memory** — `scratch.md` is gitignored; promote durable notes into
-  spec/plan/ADR/docs.
+  spec/plan/report/ADR/docs. `report.md` is the durable account of what
+  actually happened (deviations, dead ends, follow-ups) and freezes at merge.
+- **Decision escalation** — a decision beyond the agent's authority becomes a
+  `DECISION-PENDING:` line in `report.md` plus a register row in
+  [`development/adr/README.md`](adr/README.md), never a silent local fix.
 
 ## Quick-start cheatsheet
 

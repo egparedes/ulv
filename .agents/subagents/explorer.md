@@ -37,8 +37,9 @@ repository and return a focused, citation-rich answer.
 - Allowed bash: `rg`, `grep`, `ls`, `cat`, `head`, `tail`, `wc`,
   `git log`, `git blame`, `git show`, `git diff` (read-only). `find` is not
   allowed — its `-delete`/`-exec` forms are not read-only; use `rg`/`ls` instead.
-- Limit scope. If the question is broad, ask one clarifying question before
-  exploring.
+- Limit scope. If the question is too broad to answer well, return one
+  clarifying question as your result instead of exploring — you run to
+  completion in a single turn, so the caller answers and re-invokes you.
 
 ## Output format
 

@@ -6,7 +6,8 @@
 - Use **TodoWrite** liberally; it doubles as harness echo and helps you stay
   on track during long runs.
 - **Skills** are under `.claude/skills/` (symlink to `.agents/skills/`).
-  Invoke by capability, e.g. "use the verify skill".
+  Invoke by capability, e.g. "use the architect-playbook skill" or
+  "use the verify skill".
 - **Subagents** are under `.claude/agents/` (symlink to `.agents/subagents/`).
   Role agents pair 1:1 with the slash commands below
   (`product-owner`, `architect`, `developer`, `reviewer`); `explorer`
