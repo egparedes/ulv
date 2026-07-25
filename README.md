@@ -31,7 +31,10 @@ This repository follows the **agent-agnostic harness** convention:
   stanzas (skills, subagents, slash commands, hooks).
 - Shared agent assets (skills, subagents, and slash commands) live under
   `.agents/` and are symlinked into `.claude/` and `.opencode/`.
-- Per-feature specs go under `development/work/<YYYY-MM>-<slug>/`.
+- `development/` is the repo's process memory — conventions, decisions, and
+  per-feature work units (spec, plan, tasks, report) under
+  `development/work/<YYYY-MM>-<slug>/`. It is never published; `docs/` is
+  user documentation only.
 - Architecture decisions are in `development/adr/` (Michael Nygard format, append-only).
 
 See `AGENTS.md` for the full conventions.

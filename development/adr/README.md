@@ -64,6 +64,9 @@ mentions of the token without the colon are prose, not markers.)
 
 | ID | Date | Decision | Status | Source | Evidence |
 |---|---|---|---|---|---|
+| 2026-07-template-v0.6.0.1 | 2026-07-25 | Relocate process memory to `development/` by hand before running `copier update`, rather than letting Copier's rename delete the project's own docs | accepted | [ADR 0010](0010-development-tree-and-process-memory.md) | this PR |
+| 2026-07-template-v0.6.0.2 | 2026-07-25 | Move the five completed work units as-is; no back-filled `report.md` for features that merged under the previous contract | accepted | [ADR 0010](0010-development-tree-and-process-memory.md) | this PR |
+| 2026-07-template-v0.6.0.3 | 2026-07-25 | Seed `development/glossary.md` once from `architecture.md` and `ulv.model`, bypassing the spec-promotion channel, because the vocabulary predates the register | accepted | [ADR 0010](0010-development-tree-and-process-memory.md) | this PR |
 
 (ID = `<feature-slug>.<k>`, e.g. `2026-07-user-auth.1`. Source = the report
 or ADR that raised it. Evidence = the PR/commit that settled it.)
