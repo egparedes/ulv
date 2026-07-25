@@ -3,7 +3,7 @@
 ## Problem
 
 The completed `html-uplot` frontend feature
-(`specs/2026-07-uplot-frontend/`) ends with a "Manual parity checklist —
+(`development/work/2026-07-uplot-frontend/`) ends with a "Manual parity checklist —
 HUMAN PASS REQUIRED": 14 browser-interactive items (canvas drag-zoom,
 hover tooltips, legend toggling, URL-hash round-trip, touch pinch/pan,
 phone-width viewport, network isolation, and more) at the bottom of that
@@ -62,7 +62,7 @@ Config mechanisms confirmed current: Claude Code project scope is
 `.mcp.json` at the repo root (user approval prompt on first use);
 OpenCode is the `"mcp"` key in `.opencode/opencode.jsonc`; the repo's
 harness pattern is a single definition shared across both (see
-`docs/harness-usage.md`).
+`development/harness-usage.md`).
 
 ## Success criteria
 
@@ -73,7 +73,7 @@ harness pattern is a single definition shared across both (see
   (the ASV fixture with machine axes and the machine-less BMF fixture),
   serves them from a subdirectory, and drives every item of the
   14-item manual parity checklist from
-  `specs/2026-07-uplot-frontend/tasks.md` — verified by invoking the
+  `development/work/2026-07-uplot-frontend/tasks.md` — verified by invoking the
   skill and observing it complete without manual intervention.
 - Invoking the skill produces a recorded evidence report containing a
   verdict for each of the 14 checklist items, with screenshot evidence
@@ -98,7 +98,7 @@ harness pattern is a single definition shared across both (see
   verified by diffing the project's dependency declarations before and
   after.
 - The MCP-server choice is recorded as a new ADR (next free number in
-  `docs/adr/`, currently 0009) and `docs/harness-usage.md` documents
+  `development/adr/`, currently 0009) and `development/harness-usage.md` documents
   how to approve the server and invoke the skill — verified by the
   presence and content of both documents.
 - A first recorded run against the uplot feature's checklist exists,
@@ -146,7 +146,7 @@ harness pattern is a single definition shared across both (see
    recorded check, not a CI test.
 4. **No new Python/runtime dependency.** The MCP server is harness
    tooling, outside the package's dependency tree. A short ADR (next
-   free number in `docs/adr/`) records the choice.
+   free number in `development/adr/`) records the choice.
 5. **The `browser_run_code_unsafe` tool capability is not used.**
    Page-context `browser_evaluate` only.
 6. **Automation scope: 12 of the 14 checklist items become fully

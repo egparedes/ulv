@@ -25,7 +25,7 @@ the new frontend must eliminate), and the crawl harnesses in
   path computation; a full graph-key → path map would be a needless
   |params|×|benchmarks| cross product. Additive only: the vendored
   frontend never reads unknown keys, and its tests assert a superset
-  of keys. ADR: n/a (contract documented in `docs/architecture.md`,
+  of keys. ADR: n/a (contract documented in `development/architecture.md`,
   Phase 6).
 - **Generator identity**: registry name `html-uplot`, class
   `HtmlUplotOutputGenerator` in `src/ulv/outputs/html_uplot/`
@@ -133,7 +133,7 @@ hash pin, no absolute URLs, wheel packaging). The vendored generator's
 behavior is untouched.
 
 **Steps.**
-1. Author the new ADR (`docs/adr/0008-…`): uPlot vendored frontend
+1. Author the new ADR (`development/adr/0008-…`): uPlot vendored frontend
    supersedes ADR 0003's "reuse ASV UI" choice; carries the vendoring
    policy (pinned files, recorded sources + integrity hashes,
    `VENDORED.md`, `LICENSES/`); ECharts as documented fallback.
@@ -286,7 +286,7 @@ fixture kinds; `make verify` green.
 manual parity pass that stands in for browser automation.
 
 **Steps.**
-1. `docs/architecture.md`: add `ulv.outputs.common` and
+1. `development/architecture.md`: add `ulv.outputs.common` and
    `ulv.outputs.html_uplot` to the module map; document the
    `graph_paths` contract; move the "Bencher measure units" item out
    of deferred work (closed by Phase 3); link ADR 0008.

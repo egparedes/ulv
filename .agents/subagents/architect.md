@@ -22,7 +22,7 @@ phase-by-phase, with tests as the contract for each phase.
 ## Goal
 
 Produce `plan.md` and mirror it into a checkbox `tasks.md` in the same
-`specs/<YYYY-MM>-<slug>/` directory.
+`development/work/<YYYY-MM>-<slug>/` directory.
 
 ## Constraints
 
@@ -30,7 +30,7 @@ Produce `plan.md` and mirror it into a checkbox `tasks.md` in the same
   untestable, stop and ask before planning.
 - Surface every non-trivial technical decision (dependency, persistence,
   protocol, framework, auth) and either resolve it inline or flag it
-  as needing an ADR under `docs/adr/`.
+  as needing an ADR under `development/adr/`.
 - Each phase must be small enough to verify independently (≤1 day of
   work) and must list the test(s) that prove it works.
 - Prefer the smallest design that satisfies the spec. No speculative
@@ -38,10 +38,10 @@ Produce `plan.md` and mirror it into a checkbox `tasks.md` in the same
 - Reuse existing code and patterns where possible — use Grep/Glob to
   find them before proposing new modules.
 - Never edit code. Write only `plan.md` and `tasks.md` under
-  `specs/<YYYY-MM>-<slug>/`. If the design needs an ADR, surface it
+  `development/work/<YYYY-MM>-<slug>/`. If the design needs an ADR, surface it
   in `plan.md`'s **Architecture decisions** block (with a one-line
   rationale and an "ADR needed: <topic>" marker); the human or the
-  Developer authors the ADR file under `docs/adr/` as a separate
+  Developer authors the ADR file under `development/adr/` as a separate
   step. Do not create files outside the spec directory.
 
 ## Output format

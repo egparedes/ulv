@@ -7,8 +7,8 @@
   // bloating AGENTS.md itself.
   "instructions": [
     "AGENTS.md",
-    "docs/architecture.md",
-    "docs/style.md"
+    "development/architecture.md",
+    "development/style.md"
   ],
 
   // Default mode. `build` is the full-access primary; switch to `plan` for
@@ -70,7 +70,7 @@
   // We route formatting through the same per-file entry point Claude Code uses
   // (`scripts/fmt-file.sh`) so editor-time formatting is byte-for-byte what the
   // verify gate enforces. "$FILE" is replaced with the edited file's path;
-  // matching is by `extensions`. See docs/harness-usage.md.
+  // matching is by `extensions`. See development/harness-usage.md.
   "formatter": {
     // Disable the built-in formatter for this language so we don't double-format.
     "ruff": { "disabled": true },

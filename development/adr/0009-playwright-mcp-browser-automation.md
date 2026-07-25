@@ -17,7 +17,7 @@ uPlot charts are `<canvas>` elements with no accessibility-tree
 entries, so snapshot-based element targeting cannot reach data
 points — the automation server must offer coordinate-based mouse
 tools. Research verified against primary sources on 2026-07-19
-(recorded in `specs/2026-07-ui-parity-automation/spec.md`; do not
+(recorded in `development/work/2026-07-ui-parity-automation/spec.md`; do not
 re-litigate): **Playwright MCP** (`@playwright/mcp`, Microsoft,
 Apache-2.0, v0.0.78 of 2026-07-09, actively maintained, Node 18+) is
 the only maintained, fully-local option with coordinate mouse tools —

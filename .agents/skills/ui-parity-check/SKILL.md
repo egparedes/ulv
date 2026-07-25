@@ -13,9 +13,9 @@ description: |
 # ui-parity-check
 
 Automates the "Manual parity checklist" of a frontend feature spec
-(first target: `specs/2026-07-uplot-frontend/tasks.md`). Takes one
+(first target: `development/work/2026-07-uplot-frontend/tasks.md`). Takes one
 parameter: the **target spec dir** the report belongs to (default
-`specs/2026-07-uplot-frontend/`).
+`development/work/2026-07-uplot-frontend/`).
 
 ## Prerequisites — check before doing anything else
 
@@ -53,7 +53,7 @@ python3 -m http.server 8123 -d /tmp/ulv-parity
 Sites: `http://127.0.0.1:8123/asv-site/` (machine axes) and
 `http://127.0.0.1:8123/bmf-site/` (machine-less). Run every item on
 **both sites unless the item names one**. Create
-`specs/<target>/parity-evidence/` (gitignored) for screenshots before
+`development/work/<target>/parity-evidence/` (gitignored) for screenshots before
 starting.
 
 ## Calibration — mandatory before any verdict
@@ -161,8 +161,8 @@ reported hash confirms which revision a position hits.
 
 ## Report contract
 
-- Path: `specs/<target-feature>/parity-report-<YYYY-MM-DD>.md`
-  (committed). Screenshots: `specs/<target-feature>/parity-evidence/`
+- Path: `development/work/<target-feature>/parity-report-<YYYY-MM-DD>.md`
+  (committed). Screenshots: `development/work/<target-feature>/parity-evidence/`
   (gitignored), referenced by filename per item.
 - Preamble: date, harness + server version, sites built, calibration
   result.

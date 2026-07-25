@@ -8,7 +8,7 @@ A Python tool for web-based visualization of performance benchmarks
 - Package / build manager: **uv**
 - License: BSD-3-Clause
 - Tool versions, install steps, and new-machine setup:
-  see [`docs/tool-bootstrap.md`](docs/tool-bootstrap.md).
+  see [`development/tool-bootstrap.md`](development/tool-bootstrap.md).
 
 ## Commands (prefer these over guessing)
 
@@ -22,12 +22,12 @@ this file.
 
 ## Where things live (capabilities, not paths)
 
-- Architecture overview: [`docs/architecture.md`](docs/architecture.md)
-- Driving the harness (Claude Code & OpenCode): [`docs/harness-usage.md`](docs/harness-usage.md)
-- Style guide: [`docs/style.md`](docs/style.md)
-- Testing strategy: [`docs/testing.md`](docs/testing.md)
-- ADRs (decisions of record): [`docs/adr/`](docs/adr/)
-- Per-feature specs: [`specs/<YYYY-MM>-<slug>/`](specs/)
+- Architecture overview: [`development/architecture.md`](development/architecture.md)
+- Driving the harness (Claude Code & OpenCode): [`development/harness-usage.md`](development/harness-usage.md)
+- Style guide: [`development/style.md`](development/style.md)
+- Testing strategy: [`development/testing.md`](development/testing.md)
+- ADRs (decisions of record): [`development/adr/`](development/adr/)
+- Per-feature specs: [`development/work/<YYYY-MM>-<slug>/`](development/work/)
 - Supported agents & how to add one: [`.agents/README.md`](.agents/README.md)
 
 ## Do
@@ -35,14 +35,14 @@ this file.
 - `uv` is bootstrapped automatically at session start by
   [`.agents/hooks/ensure-toolchain.sh`](.agents/hooks/ensure-toolchain.sh); if you
   land in a bare shell without it, run that script (details in
-  [`docs/tool-bootstrap.md`](docs/tool-bootstrap.md)).
+  [`development/tool-bootstrap.md`](development/tool-bootstrap.md)).
 - Run `make verify` before claiming a task is done.
 - For a net-new feature, follow the four-phase loop:
   `/spec` (Product Owner) → `/plan` (Architect) → `/build` (Developer)
   → `/verify` (Reviewer). Each phase stops for review before the next
   begins. See `.agents/commands/` and `.agents/subagents/`.
 - For a new architectural choice (dependency, framework, persistence, auth),
-  add an ADR in `docs/adr/`. ADRs are append-only; supersede with a new file.
+  add an ADR in `development/adr/`. ADRs are append-only; supersede with a new file.
 - When investigating a large codebase, prefer the `explorer` subagent (read-only)
   over loading large files into the main context.
 
@@ -59,18 +59,18 @@ this file.
 
 ## Conventions
 
-- Code style: see `docs/style.md`. One worked example > a page of prose.
+- Code style: see `development/style.md`. One worked example > a page of prose.
 - Comments describe the code, not the process: explain *why*, keep them
   accurate, no review/release-process prose. See
-  [`docs/style.md`](docs/style.md#comments).
+  [`development/style.md`](development/style.md#comments).
 - Tests are the spec. If you change behaviour, change a test first.
 - Commit messages: **Conventional Commits 1.0.0** — apply the format to the **PR title** (squash-merge).
-  See [`docs/style.md`](docs/style.md#commit-messages) for the format,
+  See [`development/style.md`](development/style.md#commit-messages) for the format,
   type list, breaking-change syntax, examples, and full merge-strategy
   guidance.
 - Changelog: if the project keeps a `CHANGELOG.md`, log user-facing changes
   under `[Unreleased]` as one concise bullet each, leading with the
-  file/behaviour. See [`docs/style.md`](docs/style.md#changelog).
+  file/behaviour. See [`development/style.md`](development/style.md#changelog).
 - Branch names: `<initials>/<slug>` for personal branches; bare slug for
   shared feature branches.
 
@@ -79,7 +79,7 @@ this file.
 Per-feature spec directories use this layout:
 
 ```
-specs/<YYYY-MM>-<slug>/
+development/work/<YYYY-MM>-<slug>/
 ├─ spec.md     # WHAT and WHY; no implementation detail
 ├─ plan.md     # numbered phased plan; each phase has tests
 ├─ tasks.md    # checkbox list the agent ticks off

@@ -64,7 +64,7 @@ fix before the next push.
      decisions that should have been ADRs, and comment hygiene:
      review/release-process prose, stale or inaccurate comments,
      comments that merely restate the code, and duplicated rationale
-     blocks. See `docs/style.md` ("Comments") for the patterns to flag.
+     blocks. See `development/style.md` ("Comments") for the patterns to flag.
 - Run the project's verification gate. A failing gate is an automatic
   NEEDS-WORK with the failure cited verbatim.
 - Be specific. Every defect must cite `path/to/file.ext:LINE` and a

@@ -50,7 +50,7 @@ Each criterion becomes at least one verification step.
    from `uv.lock` fails rather than silently resolving different versions.
 4. **PR titles are enforced.** A pull request whose title is not a valid
    Conventional-Commits header fails a dedicated check; a valid one passes. The
-   accepted types match `docs/style.md`.
+   accepted types match `development/style.md`.
 5. **Tag-driven releases.** Pushing a `vX.Y.Z` tag builds the sdist and wheel,
    smoke-installs the wheel and runs `ulv --version`, and publishes a GitHub
    Release whose body is the matching `CHANGELOG.md` section, with both
@@ -71,7 +71,7 @@ Each criterion becomes at least one verification step.
 
 - **Type-checking (mypy/pyright).** None is configured today; adopting it is a
   separate decision that warrants its own ADR.
-- **Coverage gating.** No coverage tooling exists, and `docs/testing.md` treats
+- **Coverage gating.** No coverage tooling exists, and `development/testing.md` treats
   coverage as "a smoke detector, not a goal." Not introduced here.
 - **Live PyPI publishing.** Written and documented, but disabled until the PyPI
   project and a trusted publisher are configured out-of-band.

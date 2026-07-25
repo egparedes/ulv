@@ -20,5 +20,5 @@ the defects. If `GO`, summarise what changed since the last verify
 (use `git diff --stat` and `git log -1`) and stop.
 
 Never silently skip, disable, or `@ignore` a failing test. If a test
-must be skipped, draft an ADR under `docs/adr/` and ask for
+must be skipped, draft an ADR under `development/adr/` and ask for
 confirmation.

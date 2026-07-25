@@ -8,8 +8,8 @@ hooks) for different tasks — and how to phrase prompts so the existing `.agent
 configuration is used without restating conventions every time.
 
 See also: [`AGENTS.md`](../AGENTS.md) (agent instructions),
-[`CLAUDE.md`](../CLAUDE.md) (Claude Code specifics), [`docs/style.md`](style.md),
-[`docs/testing.md`](testing.md), [`.agents/README.md`](../.agents/README.md)
+[`CLAUDE.md`](../CLAUDE.md) (Claude Code specifics), [`development/style.md`](style.md),
+[`development/testing.md`](testing.md), [`.agents/README.md`](../.agents/README.md)
 (supported agents & how to add one).
 
 ## The shared model
@@ -35,7 +35,7 @@ idea ──/spec──▶ spec.md ──/plan──▶ plan.md + tasks.md ──
 ```
 
 Plus a read-only `explorer` agent any phase can call for codebase Q&A. Each
-phase writes fixed artifacts under `specs/<YYYY-MM>-<slug>/`.
+phase writes fixed artifacts under `development/work/<YYYY-MM>-<slug>/`.
 
 The five subagents and their access:
 
@@ -107,7 +107,7 @@ and `rg/ls/cat/head/tail`; destructive operations are denied.
 OpenCode reads `.opencode/opencode.jsonc`, which sets:
 
 - **`instructions`** — loads [`AGENTS.md`](../AGENTS.md),
-  [`docs/architecture.md`](architecture.md), [`docs/style.md`](style.md) as
+  [`development/architecture.md`](architecture.md), [`development/style.md`](style.md) as
   always-on context.
 - **`default_agent: "build"`** — the session starts in the full-access `build`
   primary. OpenCode has two built-in **primary** agents, cycled with **Tab**:
@@ -172,7 +172,7 @@ regression check") after any change under
 `src/ulv/outputs/html_uplot/static/`. The skill
 (`.agents/skills/ui-parity-check/SKILL.md`) builds both fixture sites,
 drives the 14-item parity checklist, and writes a per-item evidence
-report (`specs/<feature>/parity-report-<date>.md`, screenshots in the
+report (`development/work/<feature>/parity-report-<date>.md`, screenshots in the
 gitignored `parity-evidence/`) with three-way verdicts for the owner's
 sign-off review.
 
@@ -208,7 +208,7 @@ language and the correct agent + output format is selected automatically.
 
 ### Phase 2 — Plan (architect)
 
-- **Trigger:** `/plan` after the spec is reviewed (defaults to most recent `specs/*`).
+- **Trigger:** `/plan` after the spec is reviewed (defaults to most recent `development/work/*`).
 - **What you get:** `plan.md` (Architecture-decisions block + numbered phases,
   each ≤1 day with explicit Tests and Exit criteria) and a mirrored checkbox
   `tasks.md`.
@@ -260,9 +260,9 @@ These are enforced by docs + hooks; restating them in prompts is noise:
   (see `scripts/verify.sh`). Keep the fast loop (`make test`) under ~60s;
   slow suites belong in CI.
 - **Tests are the spec** — a behaviour change means changing/adding a test first.
-- **Commits** — Conventional Commits 1.0.0 in the **PR title** (squash-merge); branch commits can be freeform. See [`docs/style.md#commit-messages`](style.md#commit-messages).
+- **Commits** — Conventional Commits 1.0.0 in the **PR title** (squash-merge); branch commits can be freeform. See [`development/style.md#commit-messages`](style.md#commit-messages).
 - **ADRs** — any new dependency/persistence/protocol/auth decision gets an ADR in
-  `docs/adr/` (append-only). The architect flags these.
+  `development/adr/` (append-only). The architect flags these.
 - **Working memory** — `scratch.md` is gitignored; promote durable notes into
   spec/plan/ADR/docs.
 

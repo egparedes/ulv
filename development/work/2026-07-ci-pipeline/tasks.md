@@ -10,7 +10,7 @@ Mirrors `plan.md`. Tick as you go; every phase ends with `make verify` green.
       `docs-build` (`uv run zensical build`) targets with `##` help text; add
       both to `.PHONY`
 - [x] `scripts/verify.sh`: add the `fmt-check` step so the local gate matches CI
-- [x] `docs/adr/0007-github-actions-ci.md`: Nygard format; record
+- [x] `development/adr/0007-github-actions-ci.md`: Nygard format; record
       mirror-Make-targets, pinned uv + actions, split jobs, least-privilege
       permissions, scaffolded PyPI + how to enable it later, release runbook
 - [x] `make fmt-check`, `make docs-build`, `make verify` (fmt-check included)
@@ -37,7 +37,7 @@ Mirrors `plan.md`. Tick as you go; every phase ends with `make verify` green.
 - [x] `on: pull_request` (opened/edited/synchronize/reopened);
       `permissions: contents: read`
 - [x] stdlib regex check; title via `env:` (no shell interpolation); type list
-      matches `docs/style.md`; helpful failure message
+      matches `development/style.md`; helpful failure message
 - [x] Bad title fails, valid title passes; metacharacter title cannot execute
 - [x] `actionlint` (installed binary) clean
 

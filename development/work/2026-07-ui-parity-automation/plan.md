@@ -3,11 +3,11 @@
 Implements `spec.md` (approved, incl. its 7 Decisions). Reference
 material: the workload being automated is the 14-item "Manual parity
 checklist — HUMAN PASS REQUIRED" at the bottom of
-`specs/2026-07-uplot-frontend/tasks.md` (its preamble records the
+`development/work/2026-07-uplot-frontend/tasks.md` (its preamble records the
 verbatim fixture build/serve commands); harness wiring conventions in
-`docs/harness-usage.md`; the house skill example in
+`development/harness-usage.md`; the house skill example in
 `.agents/skills/verify/SKILL.md`; vendoring/ADR precedent in
-`docs/adr/0008-vendor-uplot-for-self-authored-frontend.md`.
+`development/adr/0008-vendor-uplot-for-self-authored-frontend.md`.
 
 Server facts were verified against primary sources on 2026-07-19 (see
 `spec.md` Background research); the plan builds on them and does not
@@ -48,7 +48,7 @@ session with no memory of this one.
   per-skill rather than directory-level. ADR: n/a.
 - **Report location — the spec dir of the feature under check**: the
   first run's report is committed as
-  `specs/2026-07-uplot-frontend/parity-report-<YYYY-MM-DD>.md` (dated,
+  `development/work/2026-07-uplot-frontend/parity-report-<YYYY-MM-DD>.md` (dated,
   since runs recur). Rationale: the report is the evidence that
   discharges *that* feature's blocking checklist, and sign-off review
   happens where the checklist lives; the skill takes the target spec
@@ -65,8 +65,8 @@ session with no memory of this one.
   (real-device touch feel; live-Bencher units string) are always
   "confirm manually" with a stated reason. ADR: n/a.
 - **Screenshots gitignored, report committed**: screenshots go to
-  `specs/<feature>/parity-evidence/`, ignored via one root
-  `.gitignore` line (`specs/*/parity-evidence/`). Rationale: recurring
+  `development/work/<feature>/parity-evidence/`, ignored via one root
+  `.gitignore` line (`development/work/*/parity-evidence/`). Rationale: recurring
   multi-MB binary artifacts would bloat the repo forever (house
   convention already gitignores per-spec scratch); the owner reviews
   them locally in the session where the run happened, and the
@@ -82,7 +82,7 @@ session with no memory of this one.
   and earn their keep because two-config version drift is the most
   likely silent failure. ADR: n/a.
 - **No CHANGELOG entry**: harness/contributor tooling, not a change
-  package users see; docs live in `docs/harness-usage.md` + ADR 0009.
+  package users see; docs live in `development/harness-usage.md` + ADR 0009.
   ADR: n/a.
 
 ## Phase 1 — Harness wiring: config, ADR 0009, skill, docs, guards
@@ -95,7 +95,7 @@ behavior stays byte-identical in steps and prerequisites. No frontend
 or package code is touched.
 
 **Steps.**
-1. Author `docs/adr/0009-playwright-mcp-browser-automation.md`:
+1. Author `development/adr/0009-playwright-mcp-browser-automation.md`:
    Playwright MCP selected (decisive capability: `--caps=vision`
    coordinate mouse tools for `<canvas>`); rejected alternatives from
    the spec's verified research (chrome-devtools-mcp, Puppeteer MCP,
@@ -191,12 +191,12 @@ or package code is touched.
          site's own subdirectory, no external hosts; the full listing
          goes into the report verbatim.
    - Report contract: path
-     `specs/<target-feature>/parity-report-<YYYY-MM-DD>.md` (target
+     `development/work/<target-feature>/parity-report-<YYYY-MM-DD>.md` (target
      spec dir is the invocation parameter; default for the first run:
-     `specs/2026-07-uplot-frontend/`); 14 items in checklist order;
+     `development/work/2026-07-uplot-frontend/`); 14 items in checklist order;
      three-way verdict vocabulary verbatim; inline textual evidence
      per item; screenshots saved to
-     `specs/<target-feature>/parity-evidence/` (gitignored) and
+     `development/work/<target-feature>/parity-evidence/` (gitignored) and
      referenced by filename; anything flaky or unverifiable is
      "confirm manually" with a reason — never silently passed.
    - Gotchas: leave an explicit `TODO(first run)` placeholder for the
@@ -208,9 +208,9 @@ or package code is touched.
    with no extra wiring; if the layout is per-skill, add the two
    matching symlinks. Update the skills `README.md` if it enumerates
    skills.
-6. Add `specs/*/parity-evidence/` to the root `.gitignore` (in the
-   agent-scratch block, alongside `specs/*/scratch.md`).
-7. Update `docs/harness-usage.md`: a short "Browser automation (MCP)"
+6. Add `development/work/*/parity-evidence/` to the root `.gitignore` (in the
+   agent-scratch block, alongside `development/work/*/scratch.md`).
+7. Update `development/harness-usage.md`: a short "Browser automation (MCP)"
    section — what the `playwright` server is for, the one-time
    approval flow in each harness (Claude Code prompts on first use of
    `.mcp.json`; OpenCode reads `opencode.jsonc`), the one-time browser
@@ -267,11 +267,11 @@ checklist annotation.
    Replace the skill's placeholder gotcha with the confirmed semantics
    (promoting the durable finding, per house convention).
 3. Invoke the `ui-parity-check` skill targeting
-   `specs/2026-07-uplot-frontend/`: build both fixture sites, serve
+   `development/work/2026-07-uplot-frontend/`: build both fixture sites, serve
    from the subdirectory, and drive all 14 items on both sites per the
    skill's procedures, capturing screenshots to
-   `specs/2026-07-uplot-frontend/parity-evidence/`.
-4. Write `specs/2026-07-uplot-frontend/parity-report-<date>.md` per
+   `development/work/2026-07-uplot-frontend/parity-evidence/`.
+4. Write `development/work/2026-07-uplot-frontend/parity-report-<date>.md` per
    the report contract: 14 verdicts in the three-way vocabulary;
    inline textual evidence; the network-isolation item includes the
    verbatim recorded request listing; the two residual items (touch
@@ -279,7 +279,7 @@ checklist annotation.
    reasons; any item the agent could not reliably verify likewise —
    never silently passed.
 5. Annotate each of the 14 checklist items in
-   `specs/2026-07-uplot-frontend/tasks.md` with its verdict and a
+   `development/work/2026-07-uplot-frontend/tasks.md` with its verdict and a
    reference to the report. **Do not tick the boxes** — the checklist
    is "HUMAN PASS REQUIRED"; ticking is the owner's act at sign-off,
    now reduced to reviewing the report plus the flagged items.
@@ -320,7 +320,7 @@ review.
   honest even on a bad run.
 - **`npx` cold start needs the network once** to fetch
   `@playwright/mcp@0.0.78` (then cached): documented in ADR 0009 and
-  `docs/harness-usage.md` as part of the one-time setup, alongside the
+  `development/harness-usage.md` as part of the one-time setup, alongside the
   browser install; never triggered by `make verify`.
 - **Skill drift vs. the checklist**: the skill hardcodes the 14 items
   of a completed feature. Accepted: the checklist is the regression

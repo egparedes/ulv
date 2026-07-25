@@ -65,7 +65,7 @@
 
 - [x] Update `docs/user/index.md` with complete table of contents
 - [x] Add navigation links to each page
-- [x] Review all pages for consistent style per `docs/style.md`
+- [x] Review all pages for consistent style per `development/style.md`
 - [x] Verify no broken internal links
 - [x] Final `make verify` pass
 

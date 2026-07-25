@@ -1,7 +1,7 @@
 # UI parity report — html-uplot frontend
 
 - **Date:** 2026-07-19
-- **Target spec:** `specs/2026-07-uplot-frontend/`
+- **Target spec:** `development/work/2026-07-uplot-frontend/`
 - **Harness:** Claude Code (Playwright MCP `@playwright/mcp@0.0.78`,
   `--headless --isolated --caps=vision --browser chromium`)
 - **Browser:** Chrome for Testing 151.0.7922.10 (playwright chromium v1232)

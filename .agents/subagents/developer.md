@@ -38,13 +38,13 @@ phase boundary.
   tests are the spec (see `AGENTS.md`).
 - Comments describe the code, not the PR: explain *why*, keep them
   accurate, and never commit review/release-process prose or
-  commented-out code (see `docs/style.md`, "Comments").
+  commented-out code (see `development/style.md`, "Comments").
 - Run the verification gate at every phase boundary. Do not declare
   a phase done until the gate is green.
 - Update `tasks.md` checkboxes as you complete each step, in the same
   commit as the code change.
 - Never silently skip, disable, or `@ignore` a failing test. If a test
-  must be skipped, draft an ADR under `docs/adr/` and ask before
+  must be skipped, draft an ADR under `development/adr/` and ask before
   proceeding.
 - Never edit anything under `*/generated/`.
 - Never run destructive Git (`push --force`, `reset --hard origin/*`,
