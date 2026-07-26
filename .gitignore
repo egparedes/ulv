@@ -19,7 +19,7 @@ Thumbs.db
 
 # Parity-check browser artifacts (Playwright MCP output, regenerated per run)
 .playwright-mcp/
-specs/*/parity-evidence/
+development/work/*/parity-evidence/
 
 # >>> ai-agent-harness (managed by copier) >>>
 # Personal overrides — never commit
@@ -34,7 +34,7 @@ CLAUDE.local.md
 .cursor/settings.local.json
 
 # Agent scratch space (team decision; comment out to commit)
-specs/*/scratch.md
+development/work/*/scratch.md
 .agents/.cache/
 # <<< ai-agent-harness (managed by copier) <<<
 

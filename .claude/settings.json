@@ -35,18 +35,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": "test -x scripts/fmt-file.sh && scripts/fmt-file.sh \"$CLAUDE_TOOL_INPUT_FILE_PATH\" || true"
+            "command": "command -v jq >/dev/null 2>&1 || exit 0; f=$(jq -r '.tool_input.file_path // empty'); S=\"${CLAUDE_PROJECT_DIR:-.}/scripts/fmt-file.sh\"; [ -n \"$f\" ] && [ -x \"$S\" ] && \"$S\" \"$f\" || true"
           }
         ]
       }
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "^Bash$",
         "hooks": [
           {
             "type": "command",
-            "command": "S=\"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks/block-destructive.sh\"; [ -r \"$S\" ] || exit 2; echo \"$CLAUDE_TOOL_INPUT\" | sh \"$S\""
+            "command": "S=\"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks/block-destructive.sh\"; [ -r \"$S\" ] || { echo \"block-destructive: $S missing or unreadable — cannot vet this command\" >&2; exit 2; }; command -v jq >/dev/null 2>&1 || { echo 'block-destructive: jq unavailable — destructive-command guard INACTIVE (see development/tool-bootstrap.md)' >&2; exit 0; }; c=$(jq -r '.tool_input.command // empty'); [ -n \"$c\" ] || exit 0; printf '%s' \"$c\" | sh \"$S\""
           }
         ]
       }
@@ -56,8 +56,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(cat); [ \"$(printf \u0027%s\u0027 \"$INPUT\" | jq -r \u0027.stop_hook_active // false\u0027)\" = \u0027true\u0027 ] \u0026\u0026 exit 0; export PATH=\"$HOME/.local/bin:$PATH\"; command -v uv \u003e/dev/null 2\u003e\u00261 || { echo \u0027verify skipped: uv unavailable (run .agents/hooks/ensure-toolchain.sh; see docs/tool-bootstrap.md)\u0027 \u003e\u00262; exit 0; }; make verify || exit 2"
-            }
+            "command": "INPUT=$(cat); if command -v jq >/dev/null 2>&1; then active=$(printf '%s' \"$INPUT\" | jq -r '.stop_hook_active // false'); else case \"$INPUT\" in *'\"stop_hook_active\":true'* | *'\"stop_hook_active\": true'*) active=true ;; *) active=false ;; esac; fi; [ \"$active\" = 'true' ] && exit 0; export PATH=\"$HOME/.local/bin:$PATH\"; command -v uv >/dev/null 2>&1 || { echo 'verify skipped: uv unavailable (run .agents/hooks/ensure-toolchain.sh; see development/tool-bootstrap.md)' >&2; exit 0; }; make verify || exit 2"
+          }
         ]
       }
     ]
