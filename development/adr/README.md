@@ -58,9 +58,17 @@ Contract: every `DECISION-PENDING:` line lands in the same PR as its register
 row. After merge the report freezes, so the marker line stays as history and
 **this register alone** records the outcome — to see what is still open, scan
 the table for `pending` rows, not the reports. The reviewer checks the
-contract per change: a `DECISION-PENDING:` line in the diff without a row
-here is a defect. (The marker is the colon form, `DECISION-PENDING:`;
-mentions of the token without the colon are prose, not markers.)
+contract per change: an escalation marker in the diff without a row here is
+a defect.
+
+A **marker** is narrower than the token. It is a line inside a
+`development/work/*/report.md` that *begins* with the token followed by a
+colon. The token written anywhere else — in these instruction files, in the
+PR template, inside backticks, mid-sentence — is prose describing the
+mechanism, not an escalation, and carries no register obligation. Without
+that positional rule the contract flags its own documentation, and every PR
+touching this file or `.agents/` inherits a defect for a marker that
+escalates nothing.
 
 | ID | Date | Decision | Status | Source | Evidence |
 |---|---|---|---|---|---|

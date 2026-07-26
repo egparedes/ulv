@@ -15,7 +15,8 @@
 - [ ] Every `DECISION-PENDING:` line added by this PR has a row in the
       decision register (`development/adr/README.md`)
 - [ ] New structural decisions (dependency, persistence, protocol, auth)
-      have an ADR in `development/adr/`
+      have an ADR in `development/adr/`, **or** a decision-register row where
+      the three criteria in `development/adr/README.md` say no ADR is warranted
 
 ## Deviations & notes for the reviewer
 

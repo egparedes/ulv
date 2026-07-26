@@ -4,6 +4,13 @@
 
 - **uv** — project / build tool.
   Install instructions below.
+- **jq** — used by the Claude Code hooks in
+  [`.claude/settings.json`](../.claude/settings.json) to read tool input from
+  stdin. Without it the hooks degrade rather than fail: formatting is skipped,
+  the Stop-hook re-entrancy check falls back to a substring test, and **the
+  destructive-command guard is inactive** (it says so on stderr). Install it
+  from your system package manager (`apt install jq`, `brew install jq`,
+  `dnf install jq`); nothing in this repo installs it for you.
 - Language runtime for **python** —
   pick one pin file as the source of truth: `.tool-versions` (read by
   both `asdf` and `mise`, recommended if you want cross-tool

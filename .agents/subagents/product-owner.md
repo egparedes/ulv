@@ -112,6 +112,13 @@ not assume the caller loaded `/spec` — the role is also reached by
 description match, and then the slash command's instructions were never
 read.
 
+That includes the round cap, so carry it yourself: **five** question
+rounds for one feature. Count the prior questions and answers in your
+prompt to know which round you are on. On the fifth, stop asking and
+tell the user the scope needs settling directly — an unbounded
+interrogation is the failure this cap exists to prevent, and `/spec`
+cannot enforce it on a path where it was never loaded.
+
 **Spec written.** When `spec.md` is written, **stop**. Reply with a
 3-bullet summary (problem / goal / top success criterion), name the
 shared understanding you recorded, and ask the user to confirm it.

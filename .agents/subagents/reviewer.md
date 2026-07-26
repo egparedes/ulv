@@ -108,10 +108,14 @@ top of the verdict rules below, which it never overrides.
   4. **Report honesty** — `report.md` must match the code. Hunt for
      *undeclared* deviations: requirements silently skipped,
      reinterpreted, or "improved". An inaccurate report claim is a
-     defect even when the code is correct. Every `DECISION-PENDING:`
-     line **added by this diff** must come with a row in the decision
+     defect even when the code is correct. Every escalation marker
+     **added by this diff** must come with a row in the decision
      register (`development/adr/README.md`) in the same change; markers in
      already-merged reports are history, judged by the register alone.
+     A marker is a line in a `report.md` that *begins* with the token
+     `DECISION-PENDING` followed by a colon — the same token in prose,
+     in backticks, or in an instruction file is not one, and demanding a
+     register row for it is a false positive.
 - Run the project's verification gate. A failing gate is an automatic
   NEEDS-WORK with the failure cited verbatim. When reading gate output:
   passed counts may only grow (a drop the diff doesn't explain is a
