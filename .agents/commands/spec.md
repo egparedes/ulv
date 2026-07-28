@@ -22,22 +22,20 @@ You are creating a new feature spec.
    "stop and ask before planning" boundary.
 5. If the product-owner hands back a **clarifying question** instead of
    `spec.md`, put it to the user, then re-invoke the product-owner
-   subagent with the question and the user's answer included in the
-   prompt — it starts each invocation with fresh context and cannot see
-   the exchange otherwise. Repeat until it produces the spec. Cap this
-   at **five rounds**: if the questions have not converged by then, stop
-   and ask the user to settle the scope directly.
+   subagent with the question, the user's answer, **and the prior Q&A**
+   included in the prompt — it starts each invocation with fresh
+   context and cannot see the exchange otherwise (the carried Q&A is
+   also how it knows the round count). Repeat until it produces the
+   spec. Cap this at **five rounds**: if the questions have not
+   converged by then, stop and ask the user to settle the scope
+   directly.
 
 The product-owner subagent will write `spec.md` and then stop for user
 review. Once the user confirms the spec, the next step is `/plan`
 (Architect role). Do not start implementing yet.
 
 If the reviewed spec's **Glossary** section pins down new domain terms,
-promote them to `development/glossary.md` as part of the review wrap-up
-(the product-owner subagent cannot write outside the feature
-directory). The glossary is a **register**: promotion from a reviewed
-spec is its one sanctioned mid-feature channel (see Document liveness
-in `development/harness-usage.md`), and the Reviewer checks each
-promoted entry against the spec's Glossary section — so promote the
-reviewed terms verbatim, and don't fold in renames or meaning changes
-of existing entries (those are trunk-gated, a dedicated PR).
+promote them verbatim to `development/glossary.md` as part of the
+review wrap-up (the product-owner subagent cannot write outside the
+feature directory; the promotion rule lives in
+`development/glossary.md`).

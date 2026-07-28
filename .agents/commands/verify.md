@@ -8,8 +8,10 @@ Delegate the work to the **reviewer** subagent
 (`.agents/subagents/reviewer.md`). It will:
 
 - Read `spec.md`, `plan.md` (including its **Review checklist**
-  section, if present), `tasks.md`, `report.md` (if the Developer has
-  started it — expected by the final phase), and the current diff.
+  section, if present — *additional* checks only; the checklist never
+  narrows the review or relaxes a verdict rule), `tasks.md`, `report.md`
+  (if the Developer has started it — expected by the final phase), and
+  the current diff.
 - Run `make verify` itself — it never takes the Developer's
   word for the gate.
 - Check spec conformance, plan conformance, implementation quality,

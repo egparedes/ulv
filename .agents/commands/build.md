@@ -30,10 +30,22 @@ You are carrying out the implementation phase of a feature.
    - Run `make verify` at every phase boundary.
    - Stop at the end of each phase and hand off to `/verify`
      (Reviewer) before starting the next.
-5. When the developer reports a phase complete, **stop** and ask the
-   user to run `/verify` before proceeding. Do not auto-start the
-   next phase.
+5. If the developer stops mid-phase, that is not a phase boundary. Its
+   reply names the stop and the servicing instruction; follow it:
+   - `HANDBACK(explore):` in `scratch.md` — run the `explorer`, append
+     its answer as a `RESULT(explore):` line (keep the `path:LINE`
+     citations), then re-invoke the developer. After three explore
+     hand-backs on the same phase, the phase is scoped too wide — stop
+     and put it to the user.
+   - `DECISION-PENDING:` in `report.md` — put the question to the user,
+     add the register row (`development/adr/README.md`), re-invoke the
+     developer with the answer.
+   - `HANDBACK(replan):` in `scratch.md` — hand back to `/plan`
+     (Architect), then re-run `/build`. After three replan hand-backs
+     on the same feature, the plan and reality are not converging —
+     stop and put the mismatch to the user instead of re-planning.
+6. When the developer reports a phase complete, **stop** and ask the
+   user to run `/verify`. Do not auto-start the next phase.
 
 Never silently skip a failing test, edit anything under `*/generated/`,
-or run destructive Git. If the plan turns out to be wrong, hand back
-to `/plan` (Architect) rather than silently re-planning.
+or run destructive Git.

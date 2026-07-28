@@ -15,6 +15,15 @@
 #     script does not.
 #
 # See .agents/README.md for the single-source-of-truth rationale.
+#
+# DIVERGES FROM THE COPIER TEMPLATE. Upstream matches the raw command text
+# with one substring `grep -qE`, which denies any command that merely *quotes*
+# a pattern — enough to block a `rg` search of this file or a PR description
+# explaining it. Behaviour here is pinned by tests/test_harness_config.py; on
+# `copier update`, keep this version and reject the upstream hunk. Like
+# upstream, the deny decision stays on POSIX `grep -qE`: `grep -o` is a
+# non-POSIX extension that suppresses stdout on binary-classified input, so
+# using the extracted match as the decision would fail open.
 
 cmd=$(cat)
 [ -n "$cmd" ] || exit 0
