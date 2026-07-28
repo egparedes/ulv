@@ -4,7 +4,7 @@ description: |
   The project's software-design ground rules and red-flag checklist. Use
   whenever designing, planning, implementing, refactoring, or reviewing
   code — any time you choose module boundaries, name things, handle
-  errors, or judge whether a change is "good enough". The role playbooks
+  errors, or judge whether a change is "good enough". The role subagents
   (product-owner, architect, developer, reviewer) build on this file;
   it is the shared core they all cite.
 ---

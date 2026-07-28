@@ -43,6 +43,10 @@ this file.
   `/spec` (Product Owner) → `/plan` (Architect) → `/build` (Developer)
   → `/verify` (Reviewer). Each phase stops for review before the next
   begins. See `.agents/commands/` and `.agents/subagents/`.
+- Subagent hand-back loops are bounded: honour the cap the role states in its
+  hand-back reply (three spike hand-backs per plan, three explore hand-backs
+  per phase, three replan hand-backs per feature, five question rounds per
+  spec — then the question goes to the user).
 - On any conflict between documents, the authority order is
   [`development/architecture.md`](development/architecture.md) > `spec.md` > `plan.md` >
   `tasks.md`. Never silently resolve a contradiction — record it in the
@@ -79,7 +83,8 @@ this file.
   accurate, no review/release-process prose. See
   [`development/style.md`](development/style.md#comments).
 - Tests are the spec. If you change behaviour, change a test first.
-- Commit messages: **Conventional Commits 1.0.0** — apply the format to the **PR title** (squash-merge).
+- Commit messages: **Conventional Commits 1.0.0** — this repo squash-merges,
+  so the format applies to the **PR title**.
   See [`development/style.md`](development/style.md#commit-messages) for the format,
   type list, breaking-change syntax, examples, and full merge-strategy
   guidance.
