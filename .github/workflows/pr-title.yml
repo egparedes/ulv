@@ -1,7 +1,7 @@
 name: PR Title
 
 # PRs are squash-merged and the PR title becomes the commit header, so it
-# must be a valid Conventional Commits message (docs/style.md).
+# must be a valid Conventional Commits message (development/style.md).
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened]
@@ -34,6 +34,6 @@ jobs:
           print(f"::error::PR title is not a valid Conventional Commits header: {title!r}")
           print("Expected e.g. 'feat: add X', 'fix(cli): handle Y', 'ci!: drop Z'.")
           print(f"Allowed types: {TYPES.replace('|', ', ')}.")
-          print("See docs/style.md (Conventional Commits 1.0.0).")
+          print("See development/style.md (Conventional Commits 1.0.0).")
           sys.exit(1)
           PY

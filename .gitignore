@@ -19,7 +19,7 @@ Thumbs.db
 
 # Parity-check browser artifacts (Playwright MCP output, regenerated per run)
 .playwright-mcp/
-specs/*/parity-evidence/
+development/work/*/parity-evidence/
 
 # >>> ai-agent-harness (managed by copier) >>>
 # Personal overrides — never commit
@@ -34,8 +34,8 @@ CLAUDE.local.md
 .cursor/settings.local.json
 
 # Agent scratch space (team decision; comment out to commit)
-specs/*/scratch.md
 .agents/.cache/
+development/work/*/scratch.md
 # <<< ai-agent-harness (managed by copier) <<<
 
 # Local-only content directories — dirs tracked via .gitkeep, contents ignored

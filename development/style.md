@@ -14,8 +14,9 @@ style, testing patterns. Prefer concrete code examples over rules._
 
 ## Anti-patterns (with the fix)
 
-_For every "don't", give the matching "do" right next to it. A wall of "don'ts"
-without alternatives makes agents over-cautious and produces worse code._
+_Fill in: for every "don't", the matching "do" right next to it. A wall of
+"don'ts" without alternatives makes agents over-cautious and produces worse
+code._
 
 Example:
 
@@ -82,9 +83,14 @@ Examples:
 
 ### Where the convention applies
 
-PRs are **squash-merged**, so only the squash commit lands in history.
-Put the Conventional Commits header in the **PR title**. Individual
-branch commits during work can be freeform working notes.
+Where the format applies depends on the repo's merge strategy:
+squash-merge → PR title only (branch commits during work can be
+freeform working notes); merge-commit or rebase-merge → every branch
+commit (rebase or amend locally to clean up WIP commits before
+pushing, and for merge commits configure the repo to use the PR title
+— GitHub's default `Merge pull request #N from <branch>` is not
+Conventional). Check the repo's GitHub merge settings or ask a
+maintainer.
 
 ## Changelog
 
@@ -99,7 +105,7 @@ When the project keeps a `CHANGELOG.md`, follow
 - Mark breaking changes (`### Removed (breaking)`, or a `!` per the commit
   convention) and add an `### Upgrade notes` block when an upgrade needs manual
   action.
-- Link the ADR when the change has one (see [`docs/adr/`](adr/)).
+- Link the ADR when the change has one (see [`development/adr/`](adr/)).
 - On release, rename `[Unreleased]` to the version + date and add the compare
   link.
 

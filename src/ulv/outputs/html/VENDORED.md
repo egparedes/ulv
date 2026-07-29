@@ -1,6 +1,6 @@
 # Vendored frontend assets
 
-See ADR 0003 (`docs/adr/0003-vendor-asv-frontend-and-third-party-js.md`).
+See ADR 0003 (`development/adr/0003-vendor-asv-frontend-and-third-party-js.md`).
 
 ## ASV web UI (`static/`, excluding `static/vendor/`)
 

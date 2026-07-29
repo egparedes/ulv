@@ -12,7 +12,7 @@ from ulv.cli import build_parser, main
 from ulv.config import Settings
 
 DOCS = [
-    Path(__file__).parent.parent / "docs" / "architecture.md",
+    Path(__file__).parent.parent / "development" / "architecture.md",
     Path(__file__).parent.parent / "CHANGELOG.md",
 ]
 

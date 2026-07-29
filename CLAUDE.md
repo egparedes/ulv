@@ -6,7 +6,9 @@
 - Use **TodoWrite** liberally; it doubles as harness echo and helps you stay
   on track during long runs.
 - **Skills** are under `.claude/skills/` (symlink to `.agents/skills/`).
-  Invoke by capability, e.g. "use the verify skill".
+  `design-principles` — the shared design ground rules and red-flag
+  checklist — is the one that ships; invoke it by capability, e.g.
+  "use the design-principles skill".
 - **Subagents** are under `.claude/agents/` (symlink to `.agents/subagents/`).
   Role agents pair 1:1 with the slash commands below
   (`product-owner`, `architect`, `developer`, `reviewer`); `explorer`

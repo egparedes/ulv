@@ -9,7 +9,7 @@
 #   - Any other agent / CI / devcontainer may call it too.
 #
 # The install command and URL come from the toolchain_install_* macros in
-# _macros.jinja (the single source; docs/tool-bootstrap.md renders the same
+# _macros.jinja (the single source; development/tool-bootstrap.md renders the same
 # macro for its manual fallback). The installer appends $HOME/.local/bin to the
 # shell profile, so the binary is on PATH for *new* shells (e.g. an agent's
 # subsequent tool calls), not the current one. A caller that needs it within its
@@ -33,5 +33,5 @@ if curl -LsSf https://astral.sh/uv/install.sh | sh >&2 && [ -x "$HOME/.local/bin
 fi
 
 echo "ensure-toolchain: ERROR — could not install uv automatically (offline or restricted network?)." >&2
-echo "ensure-toolchain: install it manually, then retry. See docs/tool-bootstrap.md." >&2
+echo "ensure-toolchain: install it manually, then retry. See development/tool-bootstrap.md." >&2
 exit 1

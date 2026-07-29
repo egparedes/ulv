@@ -1,7 +1,7 @@
 """Core data model.
 
 A `Dataset` mirrors ASV's publish-time semantics (see
-docs/architecture.md): ordered revisions, environments as factor
+development/architecture.md): ordered revisions, environments as factor
 dicts, benchmarks with parameter axes, and result series keyed by
 (benchmark, environment, revision). Input plugins build datasets; output
 generators consume them. Instances are frozen: loaders construct them

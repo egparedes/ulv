@@ -41,7 +41,7 @@ without duplicating logic that could drift from the local gate.
 - **Enforce Conventional-Commits PR titles** via a dependency-free stdlib check;
   the title is passed through `env:` and validated in a Python step, never
   interpolated into a shell (injection-safe). Accepted types match
-  `docs/style.md`.
+  `development/style.md`.
 - **Least-privilege permissions.** Default `contents: read`; the release job
   elevates to `contents: write`, and the PyPI job additionally sets
   `id-token: write`. Note GitHub *replaces* rather than merges a job's

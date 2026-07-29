@@ -2,20 +2,18 @@
 # Using the agentic harness (Claude Code & OpenCode)
 
 `Unladen Velocity` ships a single agentic coding harness that both **Claude
-Code** and **OpenCode** can drive. This guide explains how it is wired and how to
-trigger the configured capabilities (subagents, slash commands, skills,
-hooks) for different tasks — and how to phrase prompts so the existing `.agents/`
-configuration is used without restating conventions every time.
+Code** and **OpenCode** can drive. This guide explains how it is wired, which
+capability to reach for, and where the two tools differ.
 
 See also: [`AGENTS.md`](../AGENTS.md) (agent instructions),
-[`CLAUDE.md`](../CLAUDE.md) (Claude Code specifics), [`docs/style.md`](style.md),
-[`docs/testing.md`](testing.md), [`.agents/README.md`](../.agents/README.md)
+[`CLAUDE.md`](../CLAUDE.md) (Claude Code specifics), [`development/style.md`](style.md),
+[`development/testing.md`](testing.md), [`.agents/README.md`](../.agents/README.md)
 (supported agents & how to add one).
 
 ## The shared model
 
 The canonical definitions live once under `.agents/` and are symlinked into each
-tool's config directory, so the same roles, commands, and skill serve every
+tool's config directory, so the same roles, commands, and skills serve every
 tool. **You edit the files under `.agents/`, never the symlinks.**
 
 ```
@@ -23,6 +21,10 @@ tool. **You edit the files under `.agents/`, never the symlinks.**
 .agents/commands/   ─┼─►  .claude/commands/    .opencode/commands/    # /spec /plan /build /verify
 .agents/skills/     ─┴─►  .claude/skills/      .opencode/skills/      # skills
 ```
+
+`.agents/skills/` holds `design-principles` — the shared design ground rules
+and red-flag checklist every role subagent reads before acting. Each role's
+own method lives in its subagent file.
 
 The design is a **gated four-phase loop** — one slash command per phase, each
 backed by a single-purpose subagent that **stops for human review before the
@@ -35,7 +37,7 @@ idea ──/spec──▶ spec.md ──/plan──▶ plan.md + tasks.md ──
 ```
 
 Plus a read-only `explorer` agent any phase can call for codebase Q&A. Each
-phase writes fixed artifacts under `specs/<YYYY-MM>-<slug>/`.
+phase writes fixed artifacts under `development/work/<YYYY-MM>-<slug>/`.
 
 The five subagents and their access:
 
@@ -47,38 +49,17 @@ The five subagents and their access:
 | `reviewer`      | no      | read-only + verify/test/lint   | GO / NEEDS-WORK verdict, file:line defects      |
 | `explorer`      | no      | read-only search/git           | "where is X / how does Y work" summaries        |
 
-## The three ways capabilities get triggered
-
-### 1. Manual (you type it)
-
-- **Slash commands:** `/spec <slug>`, `/plan [dir]`, `/build [dir]`, `/verify`.
-- **Skill by name:** "use the verify skill".
-- **Subagent by name:** Claude Code — "use the explorer subagent to find where X
-  is wired up"; OpenCode — `@explorer find where X is wired up` (the filename is
-  the agent id).
-
-### 2. Automatic by description match (the model decides)
-
-Each subagent and skill has a `description` written as a _trigger_. When
-your prompt matches that language, the capability fires without you naming it:
-
-- The `verify` skill fires on "verify", "is this ready", "ready to commit",
-  "check this", or after any non-trivial edit.
-- `explorer` fires on "find where X is implemented", "how does Y work", "what
-  calls Z".
-- The role agents fire on their phase cues (see [per-phase prompting](#writing-prompts-so-the-right-phase-config-is-used)).
-
-### 3. Deterministic (the harness runs it, not the model)
-
-Each tool runs format / block / verify behaviour outside the model's reasoning.
-Both tools auto-format edited files through the same per-file entry point
-(`scripts/fmt-file.sh`), so you never need to ask for formatting.
-The mechanism and coverage differ per tool — see
-[Claude Code specifics](#claude-code-specifics) and
-[OpenCode specifics](#opencode-specifics).
-The one gap to know: Claude Code also runs the full gate on Stop, whereas
-OpenCode has no session-end gate, so under OpenCode you run `/verify` yourself
-(CI is the backstop).
+Subagents cannot spawn subagents, so a role that needs something run
+outside itself stops mid-phase and **hands back**: the Product Owner
+replies with one clarifying question at a time (you answer, the caller
+re-invokes it), and the Architect / Developer append a
+`HANDBACK(<spike|explore|replan>): …` line to the feature's `scratch.md`,
+with the servicing instruction carried in their reply; results are
+appended as `RESULT(<kind>): …` lines. The loops are bounded — three
+spike hand-backs per plan, three explore hand-backs per phase, three
+replan hand-backs per feature, five question rounds per spec — then
+the question comes to you. A mid-phase stop is **not** a phase
+boundary: read which stop it is before reaching for `/verify`.
 
 ## Claude Code specifics
 
@@ -99,7 +80,7 @@ Claude Code only). You cannot prompt around the hooks:
 
 Permissions allowlist the build tool, read-only git (`status/diff/log/show`),
 and `rg/ls/cat/head/tail`; destructive operations are denied.
-`.claude/rules/` holds path-scoped rule fragments (currently empty). Default to
+`.claude/rules/` holds path-scoped rule fragments (comment hygiene ships there). Default to
 **plan mode** (`shift-tab`) for non-trivial work.
 
 ## OpenCode specifics
@@ -107,7 +88,7 @@ and `rg/ls/cat/head/tail`; destructive operations are denied.
 OpenCode reads `.opencode/opencode.jsonc`, which sets:
 
 - **`instructions`** — loads [`AGENTS.md`](../AGENTS.md),
-  [`docs/architecture.md`](architecture.md), [`docs/style.md`](style.md) as
+  [`development/architecture.md`](architecture.md), [`development/style.md`](style.md) as
   always-on context.
 - **`default_agent: "build"`** — the session starts in the full-access `build`
   primary. OpenCode has two built-in **primary** agents, cycled with **Tab**:
@@ -172,9 +153,9 @@ regression check") after any change under
 `src/ulv/outputs/html_uplot/static/`. The skill
 (`.agents/skills/ui-parity-check/SKILL.md`) builds both fixture sites,
 drives the 14-item parity checklist, and writes a per-item evidence
-report (`specs/<feature>/parity-report-<date>.md`, screenshots in the
-gitignored `parity-evidence/`) with three-way verdicts for the owner's
-sign-off review.
+report (`development/work/<feature>/parity-report-<date>.md`,
+screenshots in the gitignored `parity-evidence/`) with three-way
+verdicts for the owner's sign-off review.
 
 ## Decision guide — which capability for which task
 
@@ -184,87 +165,31 @@ sign-off review.
 | Turn an approved spec into a phased plan    | `/plan`                   | architect         |
 | Implement an approved plan                  | `/build`                  | developer         |
 | Review a finished phase / get a GO verdict  | `/verify`                 | reviewer          |
-| Just run the gate and triage failures       | "verify" / verify skill   | —                 |
 | Understand existing code before changing it | explorer (name / @)       | explorer          |
 | One-off trivial fix (typo, one-liner)       | plain prompt, then verify | — (skip the loop) |
 
 **Rule of thumb:** net-new feature → run the full loop; small isolated fix →
-edit directly, then say "verify"; pure question about the code → explorer.
+edit directly, then run `make verify`; pure question about the code →
+explorer.
 
-## Writing prompts so the right phase config is used
+## Document liveness
 
-The agents are matched on description language. Phrase the request in that
-language and the correct agent + output format is selected automatically.
+Which harness files may still change, and when they freeze. "Frozen" means
+content-frozen: fixing a broken link in a sanctioned cleanup is fine; changing
+what the document *says* is not. This table is the harness's one full
+liveness statement — other files link here.
 
-### Phase 1 — Spec (product-owner)
-
-- **Trigger words:** "new feature", "spec out", "I want to add…", or `/spec <slug>`.
-- **What you get:** `spec.md` with Problem / Goal / Users & stakeholders /
-  Success criteria / Non-goals / Open questions. WHAT and WHY only — no file
-  paths or libraries.
-- **Prompt tips:** Give the user-facing intent and at least one observable
-  success condition. Don't prescribe implementation — the PO strips it. Expect
-  _one_ clarifying question if ambiguous, then it stops for your review.
-
-### Phase 2 — Plan (architect)
-
-- **Trigger:** `/plan` after the spec is reviewed (defaults to most recent `specs/*`).
-- **What you get:** `plan.md` (Architecture-decisions block + numbered phases,
-  each ≤1 day with explicit Tests and Exit criteria) and a mirrored checkbox
-  `tasks.md`.
-- **Prompt tips:** Run only once the spec is approved. New
-  dependency/persistence/protocol choices are surfaced in the **Architecture
-  decisions** block and flagged "ADR needed". It writes no code and stops.
-
-### Phase 3 — Build (developer)
-
-- **Trigger:** `/build` after the plan is approved.
-- **Behaviour baked in:** works one phase at a time; **writes the failing test
-  first** (tests are the spec); makes the smallest change to green; runs
-  `make verify` at every phase boundary; ticks `tasks.md` in the same
-  commit; **stops at each phase boundary** and asks you to `/verify` before
-  continuing.
-- **Prompt tips:** You usually just say `/build`. If the plan touches unfamiliar
-  code, it runs an explorer pass first and drops notes in `scratch.md`. Don't ask
-  it to "skip the test" — it refuses and drafts an ADR instead. It never edits
-  `*/generated/*`.
-
-### Phase 4 — Verify / review (reviewer)
-
-- **Trigger:** `/verify`.
-- **What you get:** a **GO / NEEDS-WORK** verdict across three axes — spec
-  conformance (each criterion has observable evidence), plan conformance (no
-  undocumented detours), implementation quality — plus a citation-rich defect
-  list (`path/file.ext:LINE`). It runs the gate; a red gate is automatic
-  NEEDS-WORK.
-- **Loop back:** NEEDS-WORK → `/build` to fix; GO → ship/next phase. The reviewer
-  is read-only — it never fixes, only reports.
-
-### The `verify` skill vs the `/verify` command
-
-These are distinct:
-
-- **verify skill** = "run `make verify`, triage failures, propose
-  smallest fix." Use mid-work: "verify", "is this ready". It does _not_ do the
-  spec/plan review.
-- **/verify command** = full reviewer pass against spec + plan + diff with a GO
-  verdict. Use at a phase boundary.
-
-## Conventions the agents already know (don't re-specify)
-
-These are enforced by docs + hooks; restating them in prompts is noise:
-
-- **Formatting** — automatic on edit (via `scripts/fmt-file.sh`); run
-  `make fmt` to format the whole tree.
-- **Verification gate** — `make verify` is the canonical lint + test gate
-  (see `scripts/verify.sh`). Keep the fast loop (`make test`) under ~60s;
-  slow suites belong in CI.
-- **Tests are the spec** — a behaviour change means changing/adding a test first.
-- **Commits** — Conventional Commits 1.0.0 in the **PR title** (squash-merge); branch commits can be freeform. See [`docs/style.md#commit-messages`](style.md#commit-messages).
-- **ADRs** — any new dependency/persistence/protocol/auth decision gets an ADR in
-  `docs/adr/` (append-only). The architect flags these.
-- **Working memory** — `scratch.md` is gitignored; promote durable notes into
-  spec/plan/ADR/docs.
+| File | Liveness |
+| --- | --- |
+| `AGENTS.md`, `CLAUDE.md`, `development/*.md` | living, **trunk-gated**: changed via a dedicated PR (or an explicit maintainer request), never silently mid-feature. The two **registers** (last rows) accrete by their own contracts instead |
+| `development/work/*/spec.md` | frozen once reviewed — scope changes get a new spec revision, noted in `report.md` |
+| `development/work/*/plan.md` | frozen once `/build` starts — if the plan is wrong, hand back to `/plan`; don't edit it mid-build |
+| `development/work/*/tasks.md` | living during build |
+| `development/work/*/report.md` | frozen at merge — **never retro-edited**; new findings go in the report of the feature that finds them |
+| `development/adr/NNNN-*.md` | frozen once accepted, except the Status line (supersede with a new ADR) |
+| `development/adr/README.md` decision register | **register** — rows appended mid-feature (each `DECISION-PENDING:` marker lands with its row in the same PR), Status flipped in place |
+| `development/glossary.md` | **register** — new entries only by promotion from a reviewed spec's Glossary section at `/spec` wrap-up (the rule lives in `glossary.md`); renames and meaning changes are trunk-gated like prose |
+| `development/work/*/scratch.md` | dead on completion (gitignored) |
 
 ## Quick-start cheatsheet
 
@@ -283,7 +208,7 @@ These are enforced by docs + hooks; restating them in prompts is noise:
 #   OpenCode:    @explorer find where retries are handled
 
 # Small fix, no ceremony:
-"fix the off-by-one in the pagination helper"  → then  "verify"
+"fix the off-by-one in the pagination helper"  → then run make verify
 ```
 
 Three habits that make the harness work for you:
