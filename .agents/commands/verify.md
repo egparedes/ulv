@@ -29,5 +29,7 @@ merge. Then summarise what changed since the last verify (use
 `git diff --stat` and `git log -1`) and stop.
 
 Never silently skip, disable, or `@ignore` a failing test. If a test
-must be skipped, draft an ADR under `development/adr/` and ask for
-confirmation.
+must be skipped, that is a `DECISION-PENDING:` escalation in the
+feature's `report.md` (landing as a register row — or an ADR, if it
+clears the bar in `development/adr/README.md`); ask for confirmation
+before proceeding.

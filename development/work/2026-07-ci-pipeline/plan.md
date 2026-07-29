@@ -11,8 +11,8 @@ end-to-end pass on a scratch pull request and tag
 (see `## End-to-end verification`).
 
 Reference points: the four gate steps in `scripts/verify.sh:33-36`, the Make
-targets in `Makefile`, the toolchain notes in `docs/tool-bootstrap.md`, the
-merge convention in `docs/style.md:83-88`, and the `## [x.y.z] — date`
+targets in `Makefile`, the toolchain notes in `development/tool-bootstrap.md`, the
+merge convention in `development/style.md:83-88`, and the `## [x.y.z] — date`
 changelog section format already used in `CHANGELOG.md`.
 
 ## Architecture decisions
@@ -50,7 +50,7 @@ phase is self-contained and fully verifiable locally.
 3. `scripts/verify.sh`: add a `run "fmt-check" uv run ruff format --check .`
    step (alongside the existing four) so the local/Stop-hook gate enforces the
    same format check as CI (spec Decision 1 / criterion 7).
-4. Write `docs/adr/0007-github-actions-ci.md` in Nygard format (Status Accepted
+4. Write `development/adr/0007-github-actions-ci.md` in Nygard format (Status Accepted
    / Context / Decision / Consequences) capturing the decisions above, the
    documented steps to enable PyPI later, and the release runbook (bump
    `version`, promote `[Unreleased]`, then tag).
@@ -102,7 +102,7 @@ green locally.
 2. One job passing `${{ github.event.pull_request.title }}` through `env:` into
    a stdlib `python` step that validates it against
    `^(feat|fix|docs|refactor|test|chore|build|ci|perf|style|revert)(\(.+\))?!?: .+`
-   and exits non-zero with a message citing `docs/style.md` on mismatch.
+   and exits non-zero with a message citing `development/style.md` on mismatch.
 
 **Tests.** A scratch PR titled `broken title` fails; retitled `ci: add pipeline`
 it passes. A title containing shell metacharacters cannot execute — it reaches
@@ -157,7 +157,7 @@ skipped; the Dependabot config is valid.
 
 **Steps.**
 1. `CHANGELOG.md` `[Unreleased]`: one bullet noting CI + release automation,
-   leading with the behaviour per `docs/style.md`.
+   leading with the behaviour per `development/style.md`.
 2. `README.md`: a CI status badge and a one-line pointer to the CI/contributing
    flow.
 3. Record the branch-protection follow-up (require the `quality` + matrix

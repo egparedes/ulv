@@ -102,8 +102,12 @@ fix before the next push.
   Touching another feature's `development/work/` directory, a merged feature's
   `report.md`, or the body of an existing ADR is an automatic MAJOR
   defect unless the plan explicitly called for it. The two registers
-  have their own scope contracts instead: a decision-register row must
-  pair with a `DECISION-PENDING:` line in this diff, and a new
+  have their own scope contracts instead: every `DECISION-PENDING:`
+  line in this diff must land with a matching decision-register row,
+  and a new register row must trace to its Source — a
+  `DECISION-PENDING:` line in this diff, a new ADR in this diff, or a
+  human grant recorded in the row (see `development/adr/README.md`);
+  a row with none of those is out of scope (MAJOR). A new
   `development/glossary.md` entry must trace to this feature's reviewed
   spec **Glossary** section — a glossary edit with no matching spec
   term, or **any rename or meaning change of an existing entry**, is

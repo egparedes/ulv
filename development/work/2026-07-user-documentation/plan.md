@@ -199,7 +199,7 @@ style, and a complete index.
    descriptions.
 2. Add navigation links (prev/next or see-also) at the bottom of each page.
 3. Review all pages for consistent voice, formatting, and adherence to
-   `docs/style.md`.
+   `development/style.md`.
 4. Ensure no broken internal links (relative paths).
 
 **Tests.** `make verify` passes. Manual review confirms navigation works.

@@ -83,14 +83,12 @@ Examples:
 
 ### Where the convention applies
 
-Where the format applies depends on the repo's merge strategy:
-squash-merge → PR title only (branch commits during work can be
-freeform working notes); merge-commit or rebase-merge → every branch
-commit (rebase or amend locally to clean up WIP commits before
-pushing, and for merge commits configure the repo to use the PR title
-— GitHub's default `Merge pull request #N from <branch>` is not
-Conventional). Check the repo's GitHub merge settings or ask a
-maintainer.
+Where the format applies depends on the merge strategy. **This repo
+squash-merges**: put the Conventional Commits header in the **PR
+title** — that is what lands in history, and CI enforces it
+(`.github/workflows/pr-title.yml`). Branch commits during work can be
+freeform working notes. (For reference, merge-commit or rebase-merge
+repos need every branch commit Conventional instead.)
 
 ## Changelog
 

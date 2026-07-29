@@ -92,9 +92,11 @@ phase boundary.
   a phase done until the gate is green.
 - Update `tasks.md` checkboxes as you complete each step, in the same
   commit as the code change.
-- Never silently skip, disable, or `@ignore` a failing test. If a test
-  must be skipped, draft an ADR under `development/adr/` and ask before
-  proceeding.
+- Never silently skip, disable, or `@ignore` a failing test. A test
+  skip changes behaviour the spec froze, so escalate it like any other
+  such decision: write a `DECISION-PENDING:` line in `report.md` and
+  stop for confirmation (it lands as a register row — or an ADR, if it
+  clears the bar in `development/adr/README.md`).
 - When reading gate output: passed counts may only grow. A drop you
   cannot attribute to your own intentional, declared test removal means
   stop, don't commit, and report the failure verbatim. Never add
@@ -139,7 +141,8 @@ Then stop and hand off to the Reviewer (`/verify`).
 Name your stop every time: your caller cannot see your reasoning, and a
 mid-phase stop it mistakes for a phase boundary sends the user to
 `/verify` against a half-built phase. Whenever you touch `scratch.md`,
-**append** with `Edit`, never replace with `Write` — it is the feature's
+**append** with `Edit` (using `Write` only to create it when it does
+not exist yet), never replace existing content — it is the feature's
 shared channel and gitignored, so what you clobber is gone.
 
 **Search needed.** If a search needs longer-context summarisation you

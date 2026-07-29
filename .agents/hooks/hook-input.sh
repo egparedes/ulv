@@ -6,14 +6,18 @@
 #
 # Prints the field's value on stdout, identically under either backend:
 # '' for null/absent (including a path through a non-object), 'true'/'false'
-# for booleans, raw text for strings and numbers, JSON for objects/arrays.
+# for booleans, raw text for strings, compact JSON for objects/arrays.
+# (Known residual divergence: non-canonical numeric literals like 1.5e3 may
+# render differently per backend; all current consumers read strings/booleans.)
 #
 # Exit codes: 0 read OK; 3 no working JSON parser on PATH; 4 empty or
-# unparseable payload. Callers branch on the distinction to pick their own
+# unparseable payload (both backends reject a payload that is not exactly
+# one JSON document). Callers branch on the distinction to pick their own
 # failure posture and message.
 #
-# Parses with jq when available, falling back to python3. The fallback is
-# probed by *running* python3, not `command -v` alone — stock macOS ships a
+# Parses with jq when available, falling back to python3. Both backends are
+# probed by *running* them, not `command -v` alone — a broken jq install
+# (stub, wrong arch) must fall through to python3, and stock macOS ships a
 # /usr/bin/python3 stub that passes `command -v` but fails until the Xcode
 # Command Line Tools are installed.
 #
@@ -29,9 +33,11 @@ if [ -z "$payload" ]; then
 	exit 4
 fi
 
-if command -v jq >/dev/null 2>&1; then
-	out=$(printf '%s' "$payload" | jq -r --arg p "$1" '
-		($p | split(".") | map(select(length > 0))) as $parts
+if printf '{}' | jq . >/dev/null 2>&1; then
+	out=$(printf '%s' "$payload" | jq -rcn --arg p "$1" '
+		[inputs] as $docs
+		| if ($docs | length) != 1 then error("expected exactly one JSON document") else $docs[0] end
+		| ($p | split(".") | map(select(length > 0))) as $parts
 		| (try getpath($parts) catch null)
 		| if . == null then "" elif type == "boolean" then tostring else . end
 	' 2>/dev/null) || {
@@ -57,7 +63,7 @@ if v is None:
 elif v is True or v is False:
     print(str(v).lower())
 elif isinstance(v, (dict, list)):
-    print(json.dumps(v))
+    print(json.dumps(v, separators=(",", ":")))
 else:
     print(v)
 ' "$1"

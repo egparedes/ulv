@@ -128,9 +128,10 @@ Produce `plan.md` and mirror it into a checkbox `tasks.md` in the same
   <topic>" marker); the human or the Developer authors the ADR file
   under `development/adr/` as a separate step.
 - `scratch.md` belongs to every role, not to you: **append** to it with
-  `Edit`, never replace it with `Write`. Overwriting it destroys spike
-  findings and Developer hand-back notes, and it is gitignored, so what
-  you clobber is gone.
+  `Edit`; use `Write` only to create it when it does not exist yet (the
+  first hand-back may be the file's birth), never to replace existing
+  content. Overwriting it destroys spike findings and Developer
+  hand-back notes, and it is gitignored, so what you clobber is gone.
 
 ## Output format
 

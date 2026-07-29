@@ -28,7 +28,7 @@
           },
           {
             "type": "command",
-            "command": "command -v jq >/dev/null 2>&1 || python3 -c '' >/dev/null 2>&1 || { echo 'warning: no working JSON parser (jq or python3) on PATH - the PreToolUse guard will deny every Bash call until one is installed (apt-get install jq / brew install jq)' >&2; exit 1; }"
+            "command": "printf '{}' | jq . >/dev/null 2>&1 || python3 -c '' >/dev/null 2>&1 || { echo 'warning: no working JSON parser (jq or python3) on PATH - the PreToolUse guard will deny every Bash call until one is installed (apt-get install jq / brew install jq)' >&2; exit 1; }"
           }
         ]
       }
@@ -60,7 +60,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "export PATH=\"$HOME/.local/bin:$PATH\"; flag=$(sh \"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks/hook-input.sh\" .stop_hook_active); rc=$?; [ \"$rc\" -eq 3 ] \u0026\u0026 { echo \u0027verify skipped: no JSON parser on PATH (install jq: apt-get install jq / brew install jq)\u0027 \u003e\u00262; exit 1; }; [ \"$rc\" -ne 0 ] \u0026\u0026 { echo \"verify skipped: could not read the hook input (hook-input.sh exit $rc)\" \u003e\u00262; exit 1; }; [ \"$flag\" = \u0027true\u0027 ] \u0026\u0026 exit 0; command -v uv \u003e/dev/null 2\u003e\u00261 || { echo \u0027verify skipped: uv unavailable (run .agents/hooks/ensure-toolchain.sh; see development/tool-bootstrap.md)\u0027 \u003e\u00262; exit 1; }; make verify || exit 2"
+            "command": "export PATH=\"$HOME/.local/bin:$PATH\"; flag=$(sh \"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks/hook-input.sh\" .stop_hook_active); rc=$?; [ \"$rc\" -eq 3 ] \u0026\u0026 { echo \u0027verify skipped: no JSON parser on PATH (install jq: apt-get install jq / brew install jq)\u0027 \u003e\u00262; exit 1; }; [ \"$rc\" -ne 0 ] \u0026\u0026 { echo \"verify skipped: could not read the hook input (hook-input.sh exit $rc)\" \u003e\u00262; exit 1; }; [ \"$flag\" = \u0027true\u0027 ] \u0026\u0026 exit 0; command -v uv \u003e/dev/null 2\u003e\u00261 || { echo \u0027verify skipped: uv unavailable (run .agents/hooks/ensure-toolchain.sh; see development/tool-bootstrap.md)\u0027 \u003e\u00262; exit 1; }; make -C \"${CLAUDE_PROJECT_DIR:-.}\" verify || exit 2"
             }
         ]
       }

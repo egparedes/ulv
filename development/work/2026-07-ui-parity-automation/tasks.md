@@ -6,7 +6,7 @@ Phase 1 is merged and the `playwright` MCP server is user-approved.
 
 ## Phase 1 — Harness wiring: config, ADR 0009, skill, docs, guards
 
-- [x] Author `docs/adr/0009-playwright-mcp-browser-automation.md`:
+- [x] Author `development/adr/0009-playwright-mcp-browser-automation.md`:
       choice + rejected alternatives, pin 0.0.78 + manual-bump policy,
       `--headless --isolated --caps=vision`, no
       `browser_run_code_unsafe`, one-time browser install kept out of
@@ -29,8 +29,8 @@ Phase 1 is merged and the `playwright` MCP server is user-approved.
       (confirmed directory-level: `.claude/skills` and
       `.opencode/skills` both symlink `.agents/skills`; README does
       not enumerate — no changes needed)
-- [x] `.gitignore`: add `specs/*/parity-evidence/`
-- [x] `docs/harness-usage.md`: "Browser automation (MCP)" section —
+- [x] `.gitignore`: add `development/work/*/parity-evidence/`
+- [x] `development/harness-usage.md`: "Browser automation (MCP)" section —
       approval flow per harness, one-time browser install, invoking
       `ui-parity-check`, link to ADR 0009
 - [x] `tests/test_harness_config.py` (stdlib only): `.mcp.json` valid
@@ -50,15 +50,15 @@ Phase 1 is merged and the `playwright` MCP server is user-approved.
       drag-select and `clickCount: 2`; replace the skill's
       `TODO(first run)` gotcha with the confirmed semantics
 - [ ] Invoke `ui-parity-check` targeting
-      `specs/2026-07-uplot-frontend/`: build ASV + BMF sites, serve
+      `development/work/2026-07-uplot-frontend/`: build ASV + BMF sites, serve
       from subdirectory, drive all 14 items on both sites,
       screenshots to `parity-evidence/`
-- [ ] Write `specs/2026-07-uplot-frontend/parity-report-<date>.md`:
+- [ ] Write `development/work/2026-07-uplot-frontend/parity-report-<date>.md`:
       14 verdicts (three-way vocabulary), inline textual evidence,
       verbatim request listing for network isolation, residual items
       "confirm manually" with reasons, nothing silently passed
 - [ ] Annotate the 14 checklist items in
-      `specs/2026-07-uplot-frontend/tasks.md` with verdict + report
+      `development/work/2026-07-uplot-frontend/tasks.md` with verdict + report
       reference; do NOT tick the boxes (owner's act at sign-off)
 - [ ] Any agent-verified fail: recorded in the report and flagged to
       the owner; no frontend patching in this feature

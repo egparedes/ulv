@@ -12,7 +12,7 @@ green.
       `--help` / `--version`)
 - [x] Add `tests/test_cli.py` (help exits 0, version matches, bad flag
       non-zero)
-- [x] Align ruff config with `docs/style.md`; run `make fmt`
+- [x] Align ruff config with `development/style.md`; run `make fmt`
 - [x] `make verify` green (verify.sh now active)
 
 ## Phase 2 — Core data model & plugin architecture
@@ -142,9 +142,9 @@ green.
       pass on both (sites prepared for the coordinator's pass)
 - [x] Wire Phase 7 git enrichment into the BMF input (plan Phase 8
       step 2 says it "applies when configured") or record the deferral
-      → recorded in docs/architecture.md "Deferred / future work";
+      → recorded in development/architecture.md "Deferred / future work";
       `bmf` and `bencher-api` reject `repo`/`branches` with explicit
       UlvErrors
-- [x] Update `docs/architecture.md` (module map, ADR links);
+- [x] Update `development/architecture.md` (module map, ADR links);
       `CHANGELOG.md` entry; confirm 4 ADRs exist
 - [x] `make verify` green; run `/verify` (Reviewer)

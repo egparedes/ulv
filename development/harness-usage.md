@@ -75,8 +75,12 @@ Claude Code only). You cannot prompt around the hooks:
   edited file after every write.
 - **PreToolUse (`Bash`)** hard-blocks `rm -rf`, `push --force`, `reset --hard`,
   `DROP TABLE` (exit 2) via [`.agents/hooks/block-destructive.sh`](../.agents/hooks/block-destructive.sh).
-- **Stop** runs `make verify` before the agent is allowed to stop;
-  non-zero blocks the stop. This is why "done" means "the gate is green".
+- **Stop** runs `make verify` before the agent is allowed to stop; a
+  gate failure blocks the stop (exit 2). The hook's skip paths — no
+  JSON parser, unreadable payload, `uv` unavailable — warn on stderr
+  without blocking (exit 1), so on a machine missing those tools
+  "done" is **not** proof the gate ran: fix the toolchain and run
+  `make verify` yourself.
 
 Permissions allowlist the build tool, read-only git (`status/diff/log/show`),
 and `rg/ls/cat/head/tail`; destructive operations are denied.

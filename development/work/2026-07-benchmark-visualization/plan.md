@@ -49,7 +49,7 @@ ASV's publish pipeline (`external/asv/asv/commands/publish.py`,
   `extra` mappings); BMF maps each (benchmark name, measure slug) to
   an internal benchmark with the measure as unit and lower/upper kept
   as bounds (Decision 3). ADR: n/a (documented in
-  `docs/architecture.md`, Phase 11).
+  `development/architecture.md`, Phase 11).
 - **Testbed decomposition mechanism** (Decision 8 delegates this): an
   explicit `testbed → {factor: value}` mapping table in config, with a
   declared factor list; no rule/split syntax in v1 (mapping alone
@@ -92,7 +92,7 @@ script with `--help`/`--version` only.
    usage; `ulv --version` prints the package version; a bogus flag
    exits non-zero.
 4. Ensure ruff config (line length, target version) matches
-   `docs/style.md`; run `make fmt`.
+   `development/style.md`; run `make fmt`.
 
 **Tests.** `tests/test_cli.py` (subprocess or `main(argv)` calls).
 **Exit criteria.** `make verify` passes end-to-end for the first time.
@@ -399,7 +399,7 @@ audit), update project docs, and finish the release checklist.
    multi-testbed site, serve from a subdirectory, crawl all referenced
    assets (200s, no external URLs) — the automated stand-in for the
    manual browser pass; do one manual browser pass per site.
-4. Update `docs/architecture.md` (module map: `model`, `plugins`,
+4. Update `development/architecture.md` (module map: `model`, `plugins`,
    `inputs/*`, `outputs/html`, `config`, `cli`, `gitrepo`; vendored
    frontend + ADR links); add `CHANGELOG.md` entry; confirm all four
    ADRs exist and are linked.

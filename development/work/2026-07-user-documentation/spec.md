@@ -108,8 +108,8 @@ documentation stays accurate automatically because it is generated from source.
   output plugins is out of scope; the plugin protocol is internal API.
 
 - **Contributor/developer documentation.** Docs on testing, style, ADRs,
-  and CI remain under `/docs/` and are not part of the generated user
-  documentation site.
+  and CI remain under `/development/` and are not part of the generated
+  user documentation site.
 
 - **Tutorial video or interactive walkthrough.** Text-based documentation
   only.

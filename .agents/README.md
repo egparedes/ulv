@@ -44,6 +44,33 @@ agent back at one file prevents that structurally.
 4. Put tool-specific guidance (not meant for every agent) in that tool's own file,
    not in `AGENTS.md`.
 
+## Authoring a subagent
+
+Each file in `subagents/` is a single Markdown file with YAML frontmatter,
+read by both Claude Code (via `.claude/agents/`) and OpenCode (via
+`.opencode/agents/`). Supported keys:
+
+- `name` (required) — invocation name; identity comes from this, not the
+  filename.
+- `description` (required) — used by parent agents to decide when to
+  delegate; start with "Use proactively when…" for auto-discovery.
+- `model` (optional) — `sonnet` / `opus` / `haiku` / `inherit`.
+- `tools` (optional) — Claude Code allowlist, comma-separated
+  (e.g. `Read, Grep, Glob, Bash`). Claude Code only.
+- `permission` (optional) — OpenCode per-action map with keys
+  `read` / `write` / `edit` / `bash`, each `allow` / `ask` / `deny`;
+  `bash` may be a per-pattern map (`"rg *": allow`, `"*": deny`).
+  OpenCode only.
+- `mode` (optional, **strongly recommended**) — OpenCode-only. One of
+  `primary` / `subagent` / `all`. **Defaults to `all`**, which exposes the
+  agent as a top-level primary OpenCode agent in addition to a delegated
+  one — set `mode: subagent` to keep it delegation-only.
+
+Declare `tools` and `permission` together in the same frontmatter: each tool
+reads the field it understands and ignores the other. Subagents cannot spawn
+subagents; a role that needs delegation hands back to the caller (see the
+hand-back convention in the role files).
+
 ## Caveats
 
 - **Copier-managed.** This harness is generated from a Copier template

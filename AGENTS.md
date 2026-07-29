@@ -66,9 +66,10 @@ this file.
 ## Don't
 
 - Don't edit anything under `*/generated/` — it's overwritten by your project's codegen pipeline.
-- Don't lock in a new dependency or datastore without checking whether it clears
-  the ADR bar ([`development/adr/README.md`](development/adr/README.md)) — such
-  choices usually warrant one.
+- Don't add a runtime dependency or datastore without an ADR — this repo
+  records every dependency and vendoring choice (see ADRs 0002–0009); the
+  bar in [`development/adr/README.md`](development/adr/README.md) governs
+  other kinds of decisions.
 - Don't run destructive Git: `push --force`, `reset --hard origin/*`,
   history rewrites on shared branches.
 - Don't put secrets, hostnames, or per-developer paths in this file —
@@ -83,12 +84,11 @@ this file.
   accurate, no review/release-process prose. See
   [`development/style.md`](development/style.md#comments).
 - Tests are the spec. If you change behaviour, change a test first.
-- Commit messages: **Conventional Commits 1.0.0** — where it applies depends
-  on the repo's merge strategy (squash → PR title; merge or rebase → every
-  branch commit).
+- Commit messages: **Conventional Commits 1.0.0** — this repo
+  **squash-merges**, so apply the format to the **PR title** (CI enforces
+  it); branch commits can stay freeform.
   See [`development/style.md`](development/style.md#commit-messages) for the format,
-  type list, breaking-change syntax, examples, and full merge-strategy
-  guidance.
+  type list, breaking-change syntax, and examples.
 - Changelog: if the project keeps a `CHANGELOG.md`, log user-facing changes
   under `[Unreleased]` as one concise bullet each, leading with the
   file/behaviour. See [`development/style.md`](development/style.md#changelog).

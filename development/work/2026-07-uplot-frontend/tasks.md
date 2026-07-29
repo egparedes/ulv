@@ -90,7 +90,7 @@ Mirror of `plan.md`. Tick as you go; every phase ends with
 
 ## Phase 6 — Docs, vendoring polish, parity checklist
 
-- [x] `docs/architecture.md`: module map (+`common`, +`html_uplot`),
+- [x] `development/architecture.md`: module map (+`common`, +`html_uplot`),
       `graph_paths` contract, units gap closed, ADR 0008 linked
 - [x] User docs: `--generator html-uplot` / `output_generator` example;
       vendored generator remains default
