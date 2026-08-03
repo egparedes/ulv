@@ -75,7 +75,10 @@
     // Disable the built-in formatter for this language so we don't double-format.
     "ruff": { "disabled": true },
     "project-fmt": {
-      "command": ["sh", "scripts/fmt-file.sh", "$FILE"],
+      // `bash`, not `sh`: fmt-file.sh is a bash script (`set -o pipefail`,
+      // `[[ ]]`), so running it under dash aborts on line 1 and formats
+      // nothing — silently, since a formatter's exit code is not surfaced.
+      "command": ["bash", "scripts/fmt-file.sh", "$FILE"],
       "extensions": [".py", ".pyi"]
     }
   }

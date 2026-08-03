@@ -58,12 +58,27 @@ Contract: every `DECISION-PENDING:` line lands in the same PR as its register
 row. After merge the report freezes, so the marker line stays as history and
 **this register alone** records the outcome — to see what is still open, scan
 the table for `pending` rows, not the reports. The reviewer checks the
-contract per change: a `DECISION-PENDING:` line in the diff without a row
-here is a defect. (The marker is the colon form, `DECISION-PENDING:`;
-mentions of the token without the colon are prose, not markers.)
+contract per change: an escalation marker in the diff without a row here is
+a defect.
+
+A **marker** is narrower than the token. It is a line inside a
+`development/work/*/report.md` that *begins* with the token followed by a
+colon. The token written anywhere else — in these instruction files, in the
+PR template, inside backticks, mid-sentence — is prose describing the
+mechanism, not an escalation, and carries no register obligation. Without
+that positional rule the contract flags its own documentation, and every PR
+touching this file or `.agents/` inherits a defect for a marker that
+escalates nothing.
 
 | ID | Date | Decision | Status | Source | Evidence |
 |---|---|---|---|---|---|
+| 2026-08-template-v0.7.0.1 | 2026-08-03 | Adopt the template's `development/` process-memory tree; restore locally-customized docs after copier's delete-then-create and rewrite old paths everywhere, migrated work units included | accepted | [ADR 0010](0010-development-tree-and-process-memory.md) | PR #14 |
+| 2026-08-template-v0.7.0.2 | 2026-08-03 | Move the five completed work units as-is; no back-filled `report.md` for features that merged under the previous contract | accepted | [ADR 0010](0010-development-tree-and-process-memory.md) | PR #14 |
+| 2026-08-template-v0.7.0.3 | 2026-08-03 | Seed `development/glossary.md` once from `architecture.md` and `ulv.model`, bypassing the spec-promotion channel, because the vocabulary predates the register | accepted | [ADR 0010](0010-development-tree-and-process-memory.md) | PR #14 |
+| 2026-08-template-v0.7.0.4 | 2026-08-03 | Keep the standing "runtime dependency ⇒ ADR" rule in `AGENTS.md` instead of the template's softer three-criteria bar, which would let dependency choices land with only a register row | accepted | PR #14 | `AGENTS.md` Don't list |
+| 2026-08-template-v0.7.0.5 | 2026-08-03 | Keep the concrete "squash-merge → PR title" wording in `AGENTS.md` and `development/style.md` instead of the template's strategy-generic replacement | accepted | PR #14 | `.github/workflows/pr-title.yml` |
+| 2026-08-template-v0.7.0.6 | 2026-08-03 | Harden `hook-input.sh` past upstream (functional jq probe, single-document payloads, compact-JSON backend parity) and keep the local version on `copier update` until upstream fixes land | accepted | PR #14 | grAItools/harness-copier-template#44; `tests/test_harness_config.py::TestHookInput` |
+| 2026-08-template-v0.7.0.7 | 2026-08-03 | Keep the local quote-aware `block-destructive.sh` and reject the upstream hunk on every `copier update`: upstream's single substring `grep` denies commands that merely quote a pattern | accepted | PR #14 | `.agents/hooks/block-destructive.sh` header; `tests/test_harness_config.py::TestBlockDestructive` |
 
 (ID = `<feature-slug>.<k>`, e.g. `2026-07-user-auth.1`. Source = the report
 or ADR that raised it. Evidence = the PR/commit that settled it.)
