@@ -76,10 +76,12 @@ Claude Code only). You cannot prompt around the hooks:
 - **PreToolUse (`Bash`)** hard-blocks `rm -rf`, `push --force`, `reset --hard`,
   `DROP TABLE` (exit 2) via [`.agents/hooks/block-destructive.sh`](../.agents/hooks/block-destructive.sh).
 - **Stop** runs `make verify` before the agent is allowed to stop; a
-  gate failure blocks the stop (exit 2). The hook's skip paths — no
-  JSON parser, unreadable payload, `uv` unavailable — warn on stderr
-  without blocking (exit 1), so on a machine missing those tools
-  "done" is **not** proof the gate ran: fix the toolchain and run
+  gate failure blocks the stop (exit 2). If the stop payload cannot be
+  read (no JSON parser, unreadable input) the gate still runs, but
+  **fail-open**: a failure is reported on stderr without blocking,
+  because blocking without a readable `.stop_hook_active` flag risks an
+  infinite stop loop. Only an unavailable `uv` skips the gate outright —
+  there "done" is not proof the gate ran: fix the toolchain and run
   `make verify` yourself.
 
 Permissions allowlist the build tool, read-only git (`status/diff/log/show`),

@@ -121,8 +121,9 @@ class TestClaudeCodeHookWiring:
         # hook-input.sh exits 3 when neither jq nor python3 is on PATH. A hook
         # that does not branch on it inherits whatever the surrounding shell
         # does with an empty read — which is how the guard silently allowed
-        # everything before. PreToolUse denies (fail closed); the other two
-        # skip with a visible non-zero exit (fail open, but not silently).
+        # everything before. PreToolUse denies (fail closed); PostToolUse
+        # skips its format run; Stop still runs the gate but reports a
+        # failure without blocking the stop (fail open, not silent).
         for command in self._hook_commands()[event]:
             if "hook-input.sh" not in command:
                 continue

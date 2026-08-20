@@ -11,7 +11,12 @@ tools: Read, Grep, Glob, Write, Edit
 permission:
   read: allow
   write: allow
-  edit: allow
+  # `ask`, not `allow`: the architect needs Edit only to append hand-backs
+  # to scratch.md, but OpenCode cannot path-scope edit permissions, so each
+  # edit asks the human instead — the plan phase must not silently modify
+  # code. (Claude Code ignores this map; there the guard is prose plus the
+  # reviewer's scope check.)
+  edit: ask
   bash: deny
 mode: subagent
 model: inherit
