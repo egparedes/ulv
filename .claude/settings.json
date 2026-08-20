@@ -25,6 +25,10 @@
           {
             "type": "command",
             "command": "sh \"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks/ensure-toolchain.sh\" || true"
+          },
+          {
+            "type": "command",
+            "command": "printf '{}' | jq . >/dev/null 2>&1 || python3 -c '' >/dev/null 2>&1 || { echo 'warning: no working JSON parser (jq or python3) on PATH - the PreToolUse guard will deny every Bash call until one is installed (apt-get install jq / brew install jq)' >&2; exit 1; }"
           }
         ]
       }
@@ -35,18 +39,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": "test -x scripts/fmt-file.sh && scripts/fmt-file.sh \"$CLAUDE_TOOL_INPUT_FILE_PATH\" || true"
+            "command": "f=$(sh \"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks/hook-input.sh\" .tool_input.file_path); rc=$?; [ \"$rc\" -eq 3 ] && { echo 'fmt skipped: no JSON parser on PATH (install jq: apt-get install jq / brew install jq)' >&2; exit 1; }; [ \"$rc\" -ne 0 ] && { echo \"fmt skipped: could not read the hook input (hook-input.sh exit $rc)\" >&2; exit 1; }; S=\"${CLAUDE_PROJECT_DIR:-.}/scripts/fmt-file.sh\"; [ -n \"$f\" ] && [ -x \"$S\" ] && \"$S\" \"$f\" || true"
           }
         ]
       }
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "^Bash$",
         "hooks": [
           {
             "type": "command",
-            "command": "S=\"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks/block-destructive.sh\"; [ -r \"$S\" ] || exit 2; echo \"$CLAUDE_TOOL_INPUT\" | sh \"$S\""
+            "command": "H=\"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks\"; [ -r \"$H/block-destructive.sh\" ] || { echo 'PreToolUse: block-destructive.sh is missing - denying Bash. Restore .agents/hooks, then retry.' >&2; exit 2; }; c=$(sh \"$H/hook-input.sh\" .tool_input.command); rc=$?; [ \"$rc\" -eq 3 ] && { echo 'PreToolUse: no working JSON parser on PATH, so the destructive-command guard cannot read the tool input - denying Bash. Install jq (apt-get install jq / brew install jq) from a shell outside the agent, then retry.' >&2; exit 2; }; [ \"$rc\" -ne 0 ] && { echo \"PreToolUse: could not read the tool input (hook-input.sh exit $rc; payload unreadable or .agents/hooks/hook-input.sh damaged) - denying Bash.\" >&2; exit 2; }; [ -n \"$c\" ] || { echo 'PreToolUse: no command found in the tool input - denying Bash.' >&2; exit 2; }; printf '%s' \"$c\" | sh \"$H/block-destructive.sh\""
           }
         ]
       }
@@ -56,7 +60,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(cat); [ \"$(printf \u0027%s\u0027 \"$INPUT\" | jq -r \u0027.stop_hook_active // false\u0027)\" = \u0027true\u0027 ] \u0026\u0026 exit 0; export PATH=\"$HOME/.local/bin:$PATH\"; command -v uv \u003e/dev/null 2\u003e\u00261 || { echo \u0027verify skipped: uv unavailable (run .agents/hooks/ensure-toolchain.sh; see docs/tool-bootstrap.md)\u0027 \u003e\u00262; exit 0; }; make verify || exit 2"
+            "command": "export PATH=\"$HOME/.local/bin:$PATH\"; flag=$(sh \"${CLAUDE_PROJECT_DIR:-.}/.agents/hooks/hook-input.sh\" .stop_hook_active); rc=$?; [ \"$flag\" = 'true' ] && exit 0; command -v uv >/dev/null 2>&1 || { echo 'verify skipped: uv unavailable (run .agents/hooks/ensure-toolchain.sh; see development/tool-bootstrap.md)' >&2; exit 1; }; [ \"$rc\" -eq 3 ] && { echo 'verify: no JSON parser on PATH so the stop payload is unreadable (install jq: apt-get install jq / brew install jq); running the gate fail-open - a failure is reported but does not block the stop (no loop protection without .stop_hook_active)' >&2; make -C \"${CLAUDE_PROJECT_DIR:-.}\" verify >&2 || exit 1; exit 0; }; [ \"$rc\" -ne 0 ] && { echo \"verify: could not read the stop payload (hook-input.sh exit $rc); running the gate fail-open - a failure is reported but does not block the stop\" >&2; make -C \"${CLAUDE_PROJECT_DIR:-.}\" verify >&2 || exit 1; exit 0; }; make -C \"${CLAUDE_PROJECT_DIR:-.}\" verify || exit 2"
             }
         ]
       }

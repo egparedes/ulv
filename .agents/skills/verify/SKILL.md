@@ -24,17 +24,20 @@ description: |
 3. If exit code is non-zero — parse the output, group errors by file, and
    propose the smallest fix that would make the next run pass. Cite each
    error as `path/to/file.ext:LINE`.
-4. If a test must be skipped to proceed (rare), draft an ADR explaining why
-   and ask the user to confirm. Never silently `@pytest.mark.skip`,
-   `it.skip(...)`, or `#[ignore]` a failing test.
+4. If a test must be skipped to proceed (rare), escalate it as a
+   `DECISION-PENDING:` line in the feature's `report.md` and ask the user to
+   confirm (it lands as a decision-register row — or an ADR, if it clears
+   the bar in `development/adr/README.md`). Never silently
+   `@pytest.mark.skip`, `it.skip(...)`, or `#[ignore]` a failing test.
 
 ## Gotchas
 
 - The `Stop` hook in `.claude/settings.json` already runs `make verify`.
   This skill is for the *interactive* case where the user wants verification
-  before the agent's natural stop.
+  before the agent's natural stop — and for OpenCode, which has no
+  session-end gate at all.
 - `verify.sh` exits with code 2 on failure (Stop-hook convention). Don't
   treat exit 2 as a different signal from exit 1 — both mean "fix it".
-- On slow machines `make verify` may exceed 60s. If that becomes
-  routine, open an ADR to move slow suites to
+- On slow machines `make verify` may exceed 60s. If that becomes routine,
+  raise a decision (register row) about moving slow suites to
   `make test-all` / CI.

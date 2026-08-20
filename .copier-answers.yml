@@ -1,26 +1,16 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY.
-_commit: v0.5.0
+_commit: v0.7.0
 _src_path: gh:grAItools/harness-copier-template
 commit_convention: conventional
 copilot_code_review: false
-copilot_code_review_skill: false
-cursor: false
 fmt_command: uv run ruff format .
-generate_scripts: true
 include_claude_hooks: true
-include_example_adr: true
-include_example_skill: true
-include_example_spec: true
-license: BSD-3-Clause
 lint_command: uv run ruff check .
-mcp: false
-mode: greenfield
 package_manager: uv
-pr_merge_strategy: squash
+pr_template: true
 primary_language: python
 project_description: a Python tool for web-based visualization of performance benchmarks
 project_name: Unladen Velocity
-project_slug: ulv
 task_runner: make
 test_command: uv run pytest -q
 verify_command: ./scripts/verify.sh
